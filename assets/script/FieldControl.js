@@ -3,70 +3,79 @@ cc.Class({
 
     properties: {
         numberOfCollums: {
-            get () {
-                return this._numberOfCollums
-            },
-            set (value) {
-                if (value > 0){
-                    this._numberOfCollums = value > 10 ? 10 : Math.ceil(value)   
-                }
-                else {
-                    this._numberOfCollums = 1
-                } 
-            }, 
-            type: Number,
+            // get () {
+            //     return this._numberOfCollums
+            // },
+            // set (value) {
+            //     if (value > 0){
+            //         this._numberOfCollums = value > 10 ? 10 : value   
+            //     }
+            //     else {
+            //         this._numberOfCollums = 1
+            //     } 
+            // }, 
+            type: cc.Integer,
             default: 10
         },
         numberOfLines: {
-            get () {
-                return this._numberOfLines
-            },
-            set (value) {
-                if (value > 0){
-                    this._numberOfLines = value > 10 ? 10 : Math.ceil(value)   
-                }
-                else {
-                    this._numberOfLines = 1
-                } 
-            }, 
-            type: Number,
+            // get () {
+            //     return this._numberOfLines
+            // },
+            // set (value) {
+            //     if (value > 0){
+            //         this._numberOfLines = value > 10 ? 10 : value  
+            //     }
+            //     else {
+            //         this._numberOfLines = 1
+            //     } 
+            // }, 
+            type: cc.Integer,
             default: 10
         },       
-        block: cc.Prefab
+        block: cc.Prefab,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.SetSizeField ()
+    },
 
     start () {
-        this.SetSizeField ()
-        this.CreatingNewBlocks (6)
+        this.CheckingTheNumberOfBlocks()
     },
 
-     update (dt) {
-
-     },
+    // update (dt) {},
 
     SetSizeField () {
-        var nodeBlock = this.block.data
-        var sizeBlock = nodeBlock.getContentSize()
-        var sizeField = this.node.getContentSize()
-
-        sizeField.width = sizeBlock.width*this.numberOfCollums
-        sizeField.height = sizeBlock.height*this.numberOfLines
-        this.node.setContentSize(sizeField) 
+        this.node.setScale(cc.Vec2(0.1*this.numberOfCollums, 0.1*this.numberOfLines))
     },
 
-    CreatingNewBlocks (count) {
-        var v1 = new cc.Vec2(count, 1000)
-        var v2 = new cc.Vec2(count, -1000)
-        // var physicsManager = cc.director.getPhysicsManager()
-        // physicsManager.enabled = true
-        var result = cc.director.getPhysicsManager().rayCast (v1, v2)
-        if (result.length!=0) {
-            cc.log(result[0].point)
+    CheckingTheNumberOfBlocks () {
+        for (var columnNumber = 0; columnNumber < this.numberOfCollums; columnNumber++){
+            const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width/2
+            const p1 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, -400), p1)
+            const p2 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, 400), p2)
+            var results = cc.director.getPhysicsManager().rayCast (p1, p2, cc.RayCastType.All)
+            
+            if (results.length < this.numberOfLines) {
+                this.CreatingBlocks (columnNumber, this.numberOfLines - results.length)
+            }
         }
     },
+
+    CreatingBlocks (columnNumber, numberOfBlocks) {
+        const sizeCollliderBlock = this.block.data.getComponent(cc.PhysicsBoxCollider).size
+        const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width/2
+        var _y = (this.numberOfLines - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height/2
+        for (var i = 0; i < numberOfBlocks; i++){
+           var block = cc.instantiate(this.block)
+           block.setPosition(_x, _y) 
+           this.node.addChild(block, this.numberOfLines - i, `Block`)
+           _y = _y - sizeCollliderBlock.height / this.node.scaleY                  
+        }
+    },
+
+
 
 });

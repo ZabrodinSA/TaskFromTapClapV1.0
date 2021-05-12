@@ -1,0 +1,43 @@
+{
+  "title": "test",
+  "packageName": "",
+  "startScene": "9900df1a-f677-403e-99a2-c72bc3a9f76c",
+  "excludeScenes": [],
+  "includeSDKBox": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "webOrientation": "portrait",
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "mergeStartScene": false,
+  "optimizeHotUpdate": false,
+  "md5Cache": false,
+  "encryptJs": true,
+  "xxteaKey": "ee1e409f-12ff-44",
+  "zipCompressJs": true,
+  "fb-instant-games": {},
+  "android": {
+    "packageName": ""
+  },
+  "ios": {
+    "packageName": ""
+  },
+  "mac": {
+    "packageName": ""
+  },
+  "win32": {},
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "appBundle": false
+}
