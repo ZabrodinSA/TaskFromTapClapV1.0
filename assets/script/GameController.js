@@ -2,9 +2,21 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        blocksMove: {
-            type: Boolean,
-            default: false
+        winScore: {
+            type: cc.Integer,
+            default: 0
+        },
+        currentScore: {
+            type: cc.Integer,
+            default:  0
+        },
+        numberOfMoves: {
+            type: cc.Integer,
+            default:  0
+        },
+        numberOfStirring: {
+            type: cc.Integer,
+            default:  0
         }
     },
 
