@@ -6,7 +6,12 @@ cc.Class({
             type: cc.Integer,
             default: 2
         },
+        blocksMove: {
+            type: Boolean,
+            default: false
+        }
     },
+
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -110,7 +115,6 @@ cc.Class({
             }
             var actionDelaySpawn = cc.delayTime(spawnTime)
             actions[i].push(actionDelaySpawn)
-            cc.log(spawnTime + 0.001)
             if ( i == allOmittedBlocks.length - 1) {
                 var callFuncOnMouseForAllBlocks = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
                 actions[i].push(callFuncOnMouseForAllBlocks)
@@ -120,11 +124,10 @@ cc.Class({
             var seq = cc.sequence(actions[i])
             allOmittedBlocks[i].runAction(seq)
         }
-
-
     },
 
     OnMouseForAllBlocks () { 
+        this.blocksMove = false
         var allBlocks = this.FindAllBlocks()
         for (var i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OnMouse()
@@ -132,6 +135,7 @@ cc.Class({
     },
 
     OffMouseForAllBlocks () {
+        this.blocksMove = true
         var allBlocks = this.FindAllBlocks()
         for (var i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OffMouse()
@@ -148,4 +152,52 @@ cc.Class({
         }
         return allBlocks
     },
+
+    Mixing () {
+        var allBlocks = this.FindAllBlocks ()
+        const moveTime = 5 * allBlocks[0].getComponent('BlockController').blockMovementTime
+        var allPositionAndIndex = []
+        if (!this.blocksMove) {
+            this.OffMouseForAllBlocks ()
+            var allMoves = []
+
+            for (var i = 0; i < allBlocks.length; i++) {
+                var temp = {
+                    position: cc.Vec3, 
+                    index: cc.Integer
+                }
+                temp.index = allBlocks[i].zIndex
+                temp.position = allBlocks[i].getPosition()
+                allPositionAndIndex.push (temp)
+            }
+     
+            allPositionAndIndex = shuffle (allPositionAndIndex)
+
+            for (var i = 0; i < allBlocks.length; i++) {
+                var actionMove = cc.callFunc( function (block, blockPosition) {
+                    block.runAction(cc.moveTo(moveTime, blockPosition.x, blockPosition.y))
+                }, allBlocks[i], allPositionAndIndex[i].position)
+                var delay = cc.delayTime(moveTime + 0.001) 
+                allBlocks[i].zIndex = allPositionAndIndex[i].index
+                if ( i == allBlocks.length - 1) {
+                    var callFunc = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
+                    var seq = cc.sequence(actionMove,delay, callFunc)
+                    allBlocks[i].runAction(seq)
+                } else {
+                    allBlocks[i].runAction(actionMove)
+                }
+            }
+
+        }
+        function shuffle(arr){
+            var j, temp;
+            for(var i = arr.length - 1; i > 0; i--){
+                j = Math.floor(Math.random()*(i + 1));
+                temp = arr[j];
+                arr[j] = arr[i];
+                arr[i] = temp;
+            }
+            return arr;
+        }
+    }
 });
