@@ -46,6 +46,9 @@ cc.Class({
     },
 
     DestroyAllOmittedBlocks (allOmittedBlocks, fieldControl) {
+        var gameController = cc.find('Canvas/GameController').getComponent('GameController')
+        gameController.SetNumberOfMoves()
+        gameController.SetScore(allOmittedBlocks.length)
         const moveTime = allOmittedBlocks[0].getComponent('BlockController').blockMovementTime
         const distance = allOmittedBlocks[0].getComponent(cc.PhysicsBoxCollider).size.height / allOmittedBlocks[0].parent.scaleY
         const destructionTime = allOmittedBlocks[0].getComponent('BlockController').blockDestructionTime
@@ -154,11 +157,14 @@ cc.Class({
     },
 
     Mixing () {
-        var allBlocks = this.FindAllBlocks ()
-        const moveTime = 5 * allBlocks[0].getComponent('BlockController').blockMovementTime
-        var allPositionAndIndex = []
-        if (!this.blocksMove) {
+        var gameController = cc.find('Canvas/GameController').getComponent('GameController')
+        if (gameController.numberOfStirring > 0 && !this.blocksMove) {
+            cc.log(gameController.numberOfStirring)
             this.OffMouseForAllBlocks ()
+            gameController.SetNumberOfStirring()
+            var allBlocks = this.FindAllBlocks ()
+            const moveTime = 5 * allBlocks[0].getComponent('BlockController').blockMovementTime
+            var allPositionAndIndex = []
 
             for (var i = 0; i < allBlocks.length; i++) {
                 var temp = {
@@ -168,8 +174,8 @@ cc.Class({
                 temp.index = allBlocks[i].zIndex
                 temp.position = allBlocks[i].getPosition()
                 allPositionAndIndex.push (temp)
-            }
-     
+                }
+        
             allPositionAndIndex = shuffle (allPositionAndIndex)
 
             for (var i = 0; i < allBlocks.length; i++) {
@@ -188,8 +194,7 @@ cc.Class({
                 } else {
                     allBlocks[i].runAction(actionMove)
                 }
-            }
-
+            }        
         }
         function shuffle(arr){
             var j, temp;

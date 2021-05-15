@@ -415,10 +415,10 @@
       "__id__": 7
     },
     "_enabled": true,
-    "winScore": 100,
+    "winScore": 20,
     "currentScore": 0,
     "numberOfMoves": 10,
-    "numberOfStirring": 7,
+    "numberOfStirring": 3,
     "_id": "869KGD5i5CxZrIEVXUyC/d"
   },
   {
