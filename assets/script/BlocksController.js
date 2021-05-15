@@ -12,12 +12,12 @@ cc.Class({
         }
     },
 
-
     // LIFE-CYCLE CALLBACKS:
-
+    
     // onLoad () {},
 
     start () {
+        // cc.log(this.NumberOfMoves())
     },
 
     // update (dt) {},
@@ -159,7 +159,6 @@ cc.Class({
         var allPositionAndIndex = []
         if (!this.blocksMove) {
             this.OffMouseForAllBlocks ()
-            var allMoves = []
 
             for (var i = 0; i < allBlocks.length; i++) {
                 var temp = {
@@ -180,8 +179,11 @@ cc.Class({
                 var delay = cc.delayTime(moveTime + 0.001) 
                 allBlocks[i].zIndex = allPositionAndIndex[i].index
                 if ( i == allBlocks.length - 1) {
-                    var callFunc = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
-                    var seq = cc.sequence(actionMove,delay, callFunc)
+                    var callFuncNumberOfMoves = cc.callFunc(function () {
+                        cc.find('Canvas/Moves/NumberOfPossibleMoves/NumberOfPossibleMovesText').getComponent(cc.Label).string = 
+                        'Доступно\n' + cc.find('Canvas/GameController').getComponent('BlocksController').NumberOfMoves()})
+                    var callFuncOnMouse = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
+                    var seq = cc.sequence(actionMove,delay, callFuncNumberOfMoves, callFuncOnMouse)
                     allBlocks[i].runAction(seq)
                 } else {
                     allBlocks[i].runAction(actionMove)
@@ -199,5 +201,35 @@ cc.Class({
             }
             return arr;
         }
-    }
+    },
+
+    NumberOfMoves () {
+        this.OffMouseForAllBlocks ()
+        var allBlocks = this.FindAllBlocks ()
+        var numberOfMoves = 0
+        for (var i = 0; i < allBlocks.length; i++) {
+            if (!allBlocks[i].getComponent('BlockController').blockOmitted) {
+                var countBefore = this.CountOmittedBlocks ()
+                allBlocks[i].getComponent('BlockController').EnterToBlock ()
+                var countAfter = this.CountOmittedBlocks ()
+                if (countAfter - countBefore >= this.K) {
+                    numberOfMoves ++
+                }           
+            }
+        }
+        allBlocks[0].getComponent('BlockController').LeaveToBlock()               
+        this.OnMouseForAllBlocks ()
+        return numberOfMoves       
+    },
+
+    CountOmittedBlocks () {
+        _allBlocks = this.FindAllBlocks()
+        var count = 0
+        for (var i = 0; i <_allBlocks.length; i++) {
+            if (_allBlocks[i].getComponent('BlockController').blockOmitted) {
+                count ++ 
+            }
+        } 
+        return count           
+    } 
 });

@@ -46,7 +46,7 @@ cc.Class({
 
     start () {},
 
-    // update (dt) {},
+    // updete (dt) {},
 
     OnMouse () { 
         this.node.on('mouseenter', () => {

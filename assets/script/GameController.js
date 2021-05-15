@@ -4,7 +4,7 @@ cc.Class({
     properties: {
         winScore: {
             type: cc.Integer,
-            default: 0
+            default: 100
         },
         currentScore: {
             type: cc.Integer,
@@ -12,11 +12,11 @@ cc.Class({
         },
         numberOfMoves: {
             type: cc.Integer,
-            default:  0
+            default:  10
         },
         numberOfStirring: {
             type: cc.Integer,
-            default:  0
+            default:  7
         }
     },
 
@@ -24,12 +24,24 @@ cc.Class({
 
      onLoad () {
         cc.director.getPhysicsManager().enabled = true
+        cc.log(this.numberOfMoves)
+
      },
 
     start () {
+        this.SetNumberOfMoves ()
+        this.SetNumberOfStirring ()
     },
 
     // update (dt) {},
 
-   
+    SetNumberOfMoves () {
+        cc.find('Canvas/Moves/NumberOfMovesRemaining/NumberOfMovesRemainingText').getComponent(cc.Label).string = 
+        'Осталось\n' + this.numberOfMoves
+    },
+
+    SetNumberOfStirring () {
+        cc.find('Canvas/Moves/NumberOfStirring/Background/NumberOfStirringText').getComponent(cc.Label).string = 
+        'ПЕРЕМЕШИВАНИЙ\n' + this.numberOfStirring
+    }   
 });

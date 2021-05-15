@@ -62,6 +62,12 @@ cc.Class({
                 this.CreatingBlocks (columnNumber, this.numberOfLines - results.length)
             }
         }
+        var callFunc = cc.callFunc(function () {
+            cc.find('Canvas/Moves/NumberOfPossibleMoves/NumberOfPossibleMovesText').getComponent(cc.Label).string = 
+            'Доступно\n' + cc.find('Canvas/GameController').getComponent('BlocksController').NumberOfMoves()})
+        var delay = cc.delayTime(this.block.data.getComponent('BlockController').blockSpawnTime + 0.01)
+        var seq = cc.sequence(delay, callFunc)
+        this.node.runAction(seq)
     },
 
     CreatingBlocks (columnNumber, numberOfBlocks) {
