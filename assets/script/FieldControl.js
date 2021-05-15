@@ -3,32 +3,10 @@ cc.Class({
 
     properties: {
         numberOfCollums: {
-            // get () {
-            //     return this._numberOfCollums
-            // },
-            // set (value) {
-            //     if (value > 0){
-            //         this._numberOfCollums = value > 10 ? 10 : value   
-            //     }
-            //     else {
-            //         this._numberOfCollums = 1
-            //     } 
-            // }, 
             type: cc.Integer,
             default: 10
         },
         numberOfLines: {
-            // get () {
-            //     return this._numberOfLines
-            // },
-            // set (value) {
-            //     if (value > 0){
-            //         this._numberOfLines = value > 10 ? 10 : value  
-            //     }
-            //     else {
-            //         this._numberOfLines = 1
-            //     } 
-            // }, 
             type: cc.Integer,
             default: 10
         },       
@@ -38,6 +16,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.numberOfCollums = Global.width
+        this.numberOfLines = Global.height
         this.SetSizeField ()
     },
 

@@ -58,7 +58,11 @@ cc.Class({
         this.currentScore += addScore
         cc.find('Canvas/Score/CurrentScoreText').getComponent(cc.Label).string = 
         this.currentScore + ' / ' + this.winScore
-        if (this.currentScore >= this.winScore) {
+        if (this.currentScore < this.winScore) {
+        cc.find('Canvas/Score').getComponent(cc.ProgressBar).progress = 
+        this.currentScore / this.winScore
+        } else {
+            cc.find('Canvas/Score').getComponent(cc.ProgressBar).progress = 1
             this.EndGame ()
         }
     },
