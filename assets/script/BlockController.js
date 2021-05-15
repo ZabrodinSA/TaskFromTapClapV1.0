@@ -45,6 +45,8 @@ cc.Class({
         sprite.spriteFrame = spriteFrames[cc.math.randomRangeInt(0, spriteFrames.length)]
         this.colorBlock = sprite.spriteFrame.name
 
+        this.scaleOmitted = 1 / this.node.parent.scaleX * 0.9
+        this.scaleNotOmitted = 1 / this.node.parent.scaleX 
         this.node.setScale(0, 0)
         var action = cc.scaleTo(this.blockSpawnTime, 1 / this.node.parent.scaleX, 1 / this.node.parent.scaleY)
         var callFunc = cc.callFunc(this.OnMouse, this)
@@ -76,7 +78,7 @@ cc.Class({
     
     EnterToBlock () {
         this.blockOmitted = true
-        this.node.setScale(cc.v2(0.9 * this.node.scaleX, 0.9 * this.node.scaleY))
+        this.node.setScale(cc.v2(this.scaleOmitted, this.scaleOmitted))
         var adjacentBlocks = [this.RaysFromTheBlock(this.node, 'Up'),
                               this.RaysFromTheBlock(this.node, 'Down'),
                               this.RaysFromTheBlock(this.node, 'Left'),
@@ -94,7 +96,7 @@ cc.Class({
 
     LeaveToBlock () {
         this.blockOmitted = false
-        this.node.setScale(cc.v2(this.node.scaleX / 0.9, this.node.scaleY / 0.9))
+        this.node.setScale(cc.v2(this.scaleNotOmitted, this.scaleNotOmitted))
         var nodes = cc.find('/Canvas/GameController').getComponent('BlocksController').FindAllBlocks ()
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i].getComponent('BlockController').blockOmitted) {

@@ -68,12 +68,12 @@ cc.Class({
     },
     
     EndGame () {
-        // if (this.currentScore >= this.winScore) {
-        //     Global.status = 'Вы выйграли!'
-        // } else {
-        //     Global.status = 'Вы проиграли'
-        // }
-        // cc.director.loadScene('EndGame')
+        if (this.currentScore >= this.winScore) {
+            Global.status = 'Вы выйграли!'
+        } else {
+            Global.status = 'Вы проиграли'
+        }
+        cc.director.loadScene('EndGame')
     },
 
     NewSize () {

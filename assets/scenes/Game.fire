@@ -420,7 +420,7 @@
     "winScore": 20,
     "currentScore": 0,
     "numberOfMoves": 5,
-    "numberOfStirring": 3,
+    "numberOfStirring": 50,
     "_id": "869KGD5i5CxZrIEVXUyC/d"
   },
   {

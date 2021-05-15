@@ -157,7 +157,6 @@ cc.Class({
     Mixing () {
         var gameController = cc.find('Canvas/GameController').getComponent('GameController')
         if (gameController.numberOfStirring > 0 && !this.blocksMove) {
-            cc.log(gameController.numberOfStirring)
             this.OffMouseForAllBlocks ()
             gameController.SetNumberOfStirring()
             var allBlocks = this.FindAllBlocks ()

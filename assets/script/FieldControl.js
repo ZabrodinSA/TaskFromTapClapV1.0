@@ -16,8 +16,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        // this.numberOfCollums = Global.width
-        // this.numberOfLines = Global.height
+        this.numberOfCollums = Global.width
+        this.numberOfLines = Global.height
         this.SetSizeField ()
     },
 
