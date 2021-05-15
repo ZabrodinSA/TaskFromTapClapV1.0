@@ -16,9 +16,7 @@ cc.Class({
     
     // onLoad () {},
 
-    start () {
-        // cc.log(this.NumberOfMoves())
-    },
+    // start () {},
 
     // update (dt) {},
 

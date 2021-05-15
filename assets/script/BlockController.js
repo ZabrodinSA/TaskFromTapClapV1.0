@@ -27,6 +27,14 @@ cc.Class({
             type: cc.Float,
             default: 0.7
         },
+        scaleOmitted: {
+            type: cc.Float,
+            default: 1
+        },
+        scaleNotOmitted: {
+            type: cc.Float,
+            default: 1
+        }
     },
 
     // LIFE-CYCLE CALLBACKS:
