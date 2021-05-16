@@ -78,7 +78,7 @@ cc.Class({
             Global.status = 'Вы проиграли'
         }
         var callFuncAction = cc.callFunc(function () {
-            var action = cc.scaleTo (this.endTime, 0, 0)
+            var action = cc.scaleTo (5, 0, 0)
             cc.find('Canvas/Field').runAction(action)
         })
         var callFuncEnd = cc.callFunc(function () {
