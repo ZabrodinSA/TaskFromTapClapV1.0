@@ -1,7 +1,7 @@
 {
-  "title": "test",
+  "title": "TaskFromTapClap",
   "packageName": "",
-  "startScene": "9900df1a-f677-403e-99a2-c72bc3a9f76c",
+  "startScene": "ef437eab-116c-4758-b8b9-8de075339f01",
   "excludeScenes": [],
   "includeSDKBox": false,
   "orientation": {
@@ -10,8 +10,8 @@
     "portrait": false,
     "upsideDown": false
   },
-  "webOrientation": "portrait",
-  "inlineSpriteFrames": true,
+  "webOrientation": "auto",
+  "inlineSpriteFrames": false,
   "inlineSpriteFrames_native": true,
   "mergeStartScene": false,
   "optimizeHotUpdate": false,

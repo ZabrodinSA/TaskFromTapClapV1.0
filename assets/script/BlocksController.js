@@ -208,30 +208,30 @@ cc.Class({
     NumberOfMoves () {
         this.OffMouseForAllBlocks ()
         var allBlocks = this.FindAllBlocks ()
-        var numberOfMoves = 0
+        var _numberOfMoves = 0
         for (var i = 0; i < allBlocks.length; i++) {
             if (!allBlocks[i].getComponent('BlockController').blockOmitted) {
                 var countBefore = this.CountOmittedBlocks ()
                 allBlocks[i].getComponent('BlockController').EnterToBlock ()
                 var countAfter = this.CountOmittedBlocks ()
                 if (countAfter - countBefore >= this.K) {
-                    numberOfMoves ++
+                    _numberOfMoves ++
                 }           
             }
         }
         allBlocks[0].getComponent('BlockController').LeaveToBlock()               
         this.OnMouseForAllBlocks ()
-        return numberOfMoves       
+        return _numberOfMoves       
     },
 
     CountOmittedBlocks () {
-        _allBlocks = this.FindAllBlocks()
+        var _allBlocks = this.FindAllBlocks()
         var count = 0
         for (var i = 0; i <_allBlocks.length; i++) {
             if (_allBlocks[i].getComponent('BlockController').blockOmitted) {
                 count ++ 
             }
         } 
-        return count           
+        return 0           
     } 
 });

@@ -17,6 +17,10 @@ cc.Class({
         numberOfStirring: {
             type: cc.Integer,
             default:  7
+        },
+        endTime: {
+            type: cc.Float,
+            default: 3
         }
     },
 
@@ -73,7 +77,16 @@ cc.Class({
         } else {
             Global.status = 'Вы проиграли'
         }
-        cc.director.loadScene('EndGame')
+        var callFuncAction = cc.callFunc(function () {
+            var action = cc.scaleTo (this.endTime, 0, 0)
+            cc.find('Canvas/Field').runAction(action)
+        })
+        var callFuncEnd = cc.callFunc(function () {
+            cc.director.loadScene('EndGame')
+        })
+        var delay = cc.delayTime(this.endTime)
+        var seq = cc.sequence(callFuncAction, delay, callFuncEnd)
+        this.node.runAction(seq)
     },
 
     NewSize () {
