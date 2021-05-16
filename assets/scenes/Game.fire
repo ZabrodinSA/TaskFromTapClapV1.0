@@ -189,7 +189,7 @@
       "array": [
         71.571,
         36.862,
-        329.0896534380867,
+        506.6248612138966,
         0,
         0,
         0,
@@ -417,10 +417,11 @@
       "__id__": 7
     },
     "_enabled": true,
-    "winScore": 20,
+    "winScore": 1000,
     "currentScore": 0,
-    "numberOfMoves": 5,
-    "numberOfStirring": 50,
+    "numberOfMoves": 50,
+    "numberOfStirring": 3,
+    "endTime": 3,
     "_id": "869KGD5i5CxZrIEVXUyC/d"
   },
   {

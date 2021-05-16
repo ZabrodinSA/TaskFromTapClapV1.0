@@ -221,7 +221,10 @@ cc.Class({
         }
         allBlocks[0].getComponent('BlockController').LeaveToBlock()               
         this.OnMouseForAllBlocks ()
-        return _numberOfMoves       
+        if (this.node.getComponent('GameController').numberOfStirring == 0 && _numberOfMoves == 0) {
+            this.node.getComponent('GameController').EndGame () 
+        }
+        return _numberOfMoves     
     },
 
     CountOmittedBlocks () {
