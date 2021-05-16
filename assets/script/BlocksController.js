@@ -232,6 +232,6 @@ cc.Class({
                 count ++ 
             }
         } 
-        return 0           
+        return count           
     } 
 });

@@ -174,7 +174,7 @@
       "array": [
         82,
         42,
-        329.0896534380867,
+        506.6248612138966,
         0,
         0,
         0,
@@ -1656,7 +1656,7 @@
       "__id__": 28
     },
     "_N$inputFlag": 5,
-    "_N$inputMode": 6,
+    "_N$inputMode": 2,
     "_N$stayOnTop": false,
     "_id": "f0LZly0QlFOrcoGqYUfvul"
   },

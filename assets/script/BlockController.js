@@ -78,6 +78,9 @@ cc.Class({
         this.node.on('mousedown', () => {
             cc.find('/Canvas/GameController').getComponent('BlocksController').ClickHandler()
         })
+        // this.node.on('touchstart', () => {
+        //     cc.find('/Canvas/GameController').getComponent('BlocksController').ClickHandler()
+        // })
     },
 
     OffMouse () {
