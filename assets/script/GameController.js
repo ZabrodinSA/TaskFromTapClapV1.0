@@ -31,8 +31,13 @@ cc.Class({
      },
 
     start () {
-        this.numberOfMoves ++
+        if (Global.width > Global.height) {
+            this.numberOfMoves =  Global.width + 1
+        } else {
+            this.numberOfMoves = Global.height + 1
+        }
         this.numberOfStirring ++
+        this.winScore = Global.width * Global.height
         this.SetNumberOfMoves ()
         this.SetNumberOfStirring ()
         this.SetScore (0) 
