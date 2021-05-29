@@ -18,7 +18,18 @@ cc.Class({
             type: cc.Integer,
             default: 1
         },
-
+        widthNode: {
+            type: cc.Node,
+            default: undefined
+        },
+        heightNode: {
+            type: cc.Node,
+            default: undefined
+        },
+        messageNode: {
+            type: cc.Node,
+            default: undefined
+        },
         width: {
             get () {
                 return this._width
@@ -32,7 +43,6 @@ cc.Class({
                 } 
             }, 
         },
-
         height: {
             get () {
                 return this._height
@@ -61,22 +71,22 @@ cc.Class({
     // update (dt) {},
 
     SetWidth () {
-        this.width = cc.find('Canvas/StartWindow/Width').getComponent(cc.EditBox).string
+        this.width = this.widthNode.getComponent(cc.EditBox).string
         Global.width = this.width
-        cc.find('Canvas/StartWindow/Width').getComponent(cc.EditBox).string = this.width
+        this.widthNode.getComponent(cc.EditBox).string = this.width
     },
 
     SetHeight () {
-        this.height = cc.find('Canvas/StartWindow/Height').getComponent(cc.EditBox).string
+        this.height = this.heightNode.getComponent(cc.EditBox).string
         Global.height = this.height
-        cc.find('Canvas/StartWindow/Height').getComponent(cc.EditBox).string = this.height
+        this.heightNode.getComponent(cc.EditBox).string = this.height
     },
 
     StartGame () {
         if (this.width == undefined) {
-            cc.find('Canvas/StartWindow/Message').getComponent(cc.Label).string = 'Введите ширину поля'
+            this.messageNode.getComponent(cc.Label).string = 'Введите ширину поля'
         } else if (this.height == undefined) {
-            cc.find('Canvas/StartWindow/Message').getComponent(cc.Label).string = 'Введите высоту поля'
+            this.messageNode.getComponent(cc.Label).string = 'Введите высоту поля'
         } else {
             cc.director.loadScene('Game')
         }

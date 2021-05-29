@@ -27,19 +27,19 @@ cc.Class({
             type: cc.Float,
             default: 0.7
         },
-        scaleOmittedX: {
+        _scaleOmittedX: {
             type: cc.Float,
             default: 1
         },
-        scaleOmittedY: {
+        _scaleOmittedY: {
             type: cc.Float,
             default: 1
         },
-        scaleNotOmittedX: {
+        _scaleNotOmittedX: {
             type: cc.Float,
             default: 1
         },
-        scaleNotOmittedY: {
+        _scaleNotOmittedY: {
             type: cc.Float,
             default: 1
         },
@@ -47,22 +47,27 @@ cc.Class({
             type: cc.Float,
             default: 0.9
         }, 
+        blocksController: {
+            type: cc.Node,
+            default:  undefined
+        },  
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.blocksController = this.node.parent.getComponent('FieldControl').gameControllerNode.getComponent('BlocksController')
         const sprite = this.node.getComponent(cc.Sprite)
         const spriteFrames = this.blocksAtlas.getSpriteFrames()
         sprite.spriteFrame = spriteFrames[cc.math.randomRangeInt(0, spriteFrames.length)]
         this.colorBlock = sprite.spriteFrame.name
 
-        this.scaleOmittedX = 1 / this.node.parent.scaleX * this.sizeScale
-        this.scaleOmittedY = 1 / this.node.parent.scaleY * this.sizeScale
-        this.scaleNotOmittedX = 1 / this.node.parent.scaleX 
-        this.scaleNotOmittedY = 1 / this.node.parent.scaleY 
+        this._scaleOmittedX = 1 / this.node.parent.scaleX * this.sizeScale
+        this._scaleOmittedY = 1 / this.node.parent.scaleY * this.sizeScale
+        this._scaleNotOmittedX = 1 / this.node.parent.scaleX 
+        this._scaleNotOmittedY = 1 / this.node.parent.scaleY 
         this.node.setScale(0, 0)
-        const action = cc.scaleTo(this.blockSpawnTime, this.scaleNotOmittedX, this.scaleNotOmittedY)
+        const action = cc.scaleTo(this.blockSpawnTime, this._scaleNotOmittedX, this._scaleNotOmittedY)
         const callFunc = cc.callFunc(function () {this.OnMouse ()}, this)
         const seq = cc.sequence(action, callFunc)
         this.node.runAction(seq)
@@ -80,7 +85,7 @@ cc.Class({
             this.LeaveToBlock()
         })
         this.node.on('mousedown', () => {
-            cc.find('/Canvas/GameController').getComponent('BlocksController').ClickHandler()
+            this.blocksController.ClickHandler()
         })
     },
 
@@ -92,7 +97,7 @@ cc.Class({
     
     EnterToBlock () {
         this.blockOmitted = true
-        this.node.setScale(cc.v2(this.scaleOmittedX, this.scaleOmittedY))
+        this.node.setScale(cc.v2(this._scaleOmittedX, this._scaleOmittedY))
         const adjacentBlocks = [this.RaysFromTheBlock(this.node, 'Up'),
                               this.RaysFromTheBlock(this.node, 'Down'),
                               this.RaysFromTheBlock(this.node, 'Left'),
@@ -110,11 +115,12 @@ cc.Class({
 
     LeaveToBlock () {
         this.blockOmitted = false
-        this.node.setScale(cc.v2(this.scaleNotOmittedX, this.scaleNotOmittedY))
-        const nodes = cc.find('/Canvas/GameController').getComponent('BlocksController').FindAllBlocks ()
+        this.node.setScale(cc.v2(this._scaleNotOmittedX, this._scaleNotOmittedY))
+        const nodes = this.blocksController.FindAllBlocks ()
         for (var i = 0; i < nodes.length; i++) {
-            if (nodes[i].getComponent('BlockController').blockOmitted) {
-                nodes[i].getComponent('BlockController').LeaveToBlock ()
+            const blockController = nodes[i].getComponent('BlockController')
+            if (blockController.blockOmitted) {
+                blockController.LeaveToBlock ()
             }
         }
 

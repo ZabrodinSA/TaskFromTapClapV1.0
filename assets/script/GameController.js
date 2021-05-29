@@ -2,21 +2,41 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        winScore: {
+        _winScore: {
             type: cc.Integer,
-            default: 100
+            default: 0
         },
-        currentScore: {
+        _currentScore: {
             type: cc.Integer,
             default:  0
         },
-        numberOfMoves: {
+        _numberOfMoves: {
             type: cc.Integer,
-            default:  10
+            default:  0
         },
-        numberOfStirring: {
+        _numberOfStirring: {
             type: cc.Integer,
-            default:  7
+            default:  1
+        },
+        numberOfMovesRemainingTextNode: {
+            type: cc.Node,
+            default:  undefined
+        },
+        numberOfStirringTextNode: {
+            type: cc.Node,
+            default:  undefined
+        },
+        scoreNode: {
+            type: cc.Node,
+            default:  undefined
+        },
+        currentScoreTextNode: {
+            type: cc.Node,
+            default:  undefined
+        },
+        fieldNode: {
+            type: cc.Node,
+            default:  undefined
         },
         endTime: {
             type: cc.Float,
@@ -48,68 +68,69 @@ cc.Class({
     },
 
     SetNumberOfMoves (numberOfMoves) {
-        this.numberOfMoves = numberOfMoves
-        cc.find('Canvas/Moves/NumberOfMovesRemaining/NumberOfMovesRemainingText').getComponent(cc.Label).string = 
-        'Осталось\n' + numberOfMoves  
+        this._numberOfMoves = numberOfMoves
+        this.numberOfMovesRemainingTextNode.getComponent(cc.Label).string = 'Осталось\n' + numberOfMoves  
     },
 
     ReduceTheNumberOfMoves () {
-        this.numberOfMoves --
-        this.SetNumberOfMoves (this.numberOfMoves)
-        if (this.numberOfMoves == 0) {
+        this._numberOfMoves --
+                this.SetNumberOfMoves (this._numberOfMoves)
+        if (this._numberOfMoves == 0) {
             this.EndGame () 
         } 
     },
 
     InitialNumberOfStirring () {
-        return this.numberOfStirring
+        return this._numberOfStirring
     },
 
     SetNumberOfStirring (numberOfStirring) {
-        this.numberOfStirring = numberOfStirring
-        cc.find('Canvas/Moves/NumberOfStirring/Background/NumberOfStirringText').getComponent(cc.Label).string = 
-        'ПЕРЕМЕШИВАНИЙ\n' + numberOfStirring
+        this._numberOfStirring = numberOfStirring
+        this.numberOfStirringTextNode.getComponent(cc.Label).string = 'ПЕРЕМЕШИВАНИЙ\n' + numberOfStirring
     },
 
     ReduceTheNumberOfStirring () {
-        this.numberOfStirring --
-        if (this.numberOfStirring < 0) {
-            this.numberOfStirring = 0
+        this._numberOfStirring --
+        if (this._numberOfStirring < 0) {
+            this._numberOfStirring = 0
         } 
-        this.SetNumberOfStirring (this.numberOfStirring)
+        this.SetNumberOfStirring (this._numberOfStirring)
     },
 
     InitialWinScore () {
-        this.winScore = Global.width * Global.height
+        return Global.width * Global.height
     },
 
     
     SetWinScore (winScore) {
-        this.WinScore = winScore
+        this._winScore = winScore
     },
 
     SetScore (addScore) {
-        this.currentScore += addScore
-        cc.find('Canvas/Score/CurrentScoreText').getComponent(cc.Label).string = 
-        this.currentScore + ' / ' + this.winScore
-        if (this.currentScore < this.winScore) {
-        cc.find('Canvas/Score').getComponent(cc.ProgressBar).progress = 
-        this.currentScore / this.winScore
+        this._currentScore += addScore
+        this.currentScoreTextNode.getComponent(cc.Label).string = this._currentScore + ' / ' + this._winScore
+        if (this._currentScore < this._winScore) {
+        this.scoreNode.getComponent(cc.ProgressBar).progress = this._currentScore / this._winScore
         } else {
-            cc.find('Canvas/Score').getComponent(cc.ProgressBar).progress = 1
+            this.scoreNode.getComponent(cc.ProgressBar).progress = 1
             this.EndGame ()
         }
     },
     
     EndGame () {
-        if (this.currentScore >= this.winScore) {
+        if (this._currentScore >= this._winScore) {
             Global.status = 'Вы выйграли!'
         } else {
             Global.status = 'Вы проиграли'
         }
+        this.EndGameAction ()
+    },
+
+    EndGameAction () {
+        const field = this.fieldNode
         const callFuncAction = cc.callFunc(function () {
             const action = cc.scaleTo (5, 0, 0)
-            cc.find('Canvas/Field').runAction(action)
+            field.runAction(action)
         })
         const callFuncEnd = cc.callFunc(function () {
             cc.director.loadScene('EndGame')

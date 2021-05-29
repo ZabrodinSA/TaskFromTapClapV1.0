@@ -2,13 +2,16 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
+        statusNode: {
+            type: cc.Node,
+            default:  undefined
+        },   
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        cc.find('Canvas/EndWindow/Status').getComponent(cc.Label).string = Global.status
+        this.statusNode.getComponent(cc.Label).string = Global.status
     },
 
     // start () {},

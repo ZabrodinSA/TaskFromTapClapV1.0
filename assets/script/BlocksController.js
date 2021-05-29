@@ -6,14 +6,22 @@ cc.Class({
             type: cc.Integer,
             default: 2
         },
-        blocksMove: {
+        _blocksMove: {
             type: Boolean,
             default: false
         },
         mixingTime: {
             type: cc.Float,
             default: 1.5
-        }
+        },
+        fieldNode: {
+            type: cc.Node,
+            default:  undefined
+        }, 
+        numberOfPossibleMovesTextNode: {
+            type: cc.Node,
+            default:  undefined
+        },   
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,8 +34,7 @@ cc.Class({
 
     ClickHandler () {
         this.OffMouseForAllBlocks()
-        const field = cc.find('/Canvas/Field')
-        const fieldControl = field.getComponent('FieldControl')
+        const fieldControl = this.fieldNode.getComponent('FieldControl')
         const allBlocks = this.FindAllBlocks()
         const allOmittedBlocks = []
         const allNotOmittedBlocks = []
@@ -47,13 +54,14 @@ cc.Class({
     },
 
     DestroyAllOmittedBlocks (allOmittedBlocks, fieldControl) {
-        const gameController = cc.find('Canvas/GameController').getComponent('GameController')
+        const gameController = this.node.getComponent('GameController')
         gameController.ReduceTheNumberOfMoves()
         gameController.SetScore(allOmittedBlocks.length)
-        const moveTime = allOmittedBlocks[0].getComponent('BlockController').blockMovementTime
+        const blockController = allOmittedBlocks[0].getComponent('BlockController')
+        const moveTime = blockController.blockMovementTime
         const distance = allOmittedBlocks[0].getComponent(cc.PhysicsBoxCollider).size.height / allOmittedBlocks[0].parent.scaleY
-        const destructionTime = allOmittedBlocks[0].getComponent('BlockController').blockDestructionTime
-        const spawnTime = allOmittedBlocks[0].getComponent('BlockController').blockSpawnTime
+        const destructionTime = blockController.blockDestructionTime
+        const spawnTime = blockController.blockSpawnTime
         let delay = 0
         let actions = [[]]
         actions.length = allOmittedBlocks.length
@@ -120,7 +128,8 @@ cc.Class({
             const actionDelaySpawn = cc.delayTime(spawnTime)
             actions[i].push(actionDelaySpawn)
             if ( i == allOmittedBlocks.length - 1) {
-                const callFuncOnMouseForAllBlocks = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
+                const blocksController = this
+                const callFuncOnMouseForAllBlocks = cc.callFunc(function () {blocksController.OnMouseForAllBlocks ()})
                 actions[i].push(callFuncOnMouseForAllBlocks)
             }
             actions[i].push(callFuncDestroy)
@@ -131,7 +140,7 @@ cc.Class({
     },
 
     OnMouseForAllBlocks () { 
-        this.blocksMove = false
+        this._blocksMove = false
         const allBlocks = this.FindAllBlocks()
         for (var i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OnMouse()
@@ -139,7 +148,7 @@ cc.Class({
     },
 
     OffMouseForAllBlocks () {
-        this.blocksMove = true
+        this._blocksMove = true
         const allBlocks = this.FindAllBlocks()
         for (var i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OffMouse()
@@ -147,7 +156,7 @@ cc.Class({
     },
 
     FindAllBlocks () {
-        const allNodes = cc.find('/Canvas/Field').children
+        const allNodes = this.fieldNode.children
         let allBlocks = []
         for (var i = 0; i < allNodes.length; i++) {
             if (allNodes[i].name == 'Block' ) {
@@ -158,8 +167,9 @@ cc.Class({
     },
 
     Mixing () {
-        const gameController = cc.find('Canvas/GameController').getComponent('GameController')
-        if (gameController.numberOfStirring > 0 && !this.blocksMove) {
+        const gameController = this.node.getComponent('GameController')
+        const blocksController = this
+        if (gameController._numberOfStirring > 0 && !this._blocksMove) {
             this.OffMouseForAllBlocks ()
             gameController.ReduceTheNumberOfStirring()
             const allBlocks = this.FindAllBlocks ()
@@ -185,10 +195,11 @@ cc.Class({
                 const delay = cc.delayTime(moveTime) 
                 allBlocks[i].zIndex = allPositionAndIndex[i].index
                 if ( i == allBlocks.length - 1) {
+                    const numberOfPossibleMovesText = this.numberOfPossibleMovesTextNode
                     const callFuncNumberOfMoves = cc.callFunc(function () {
-                        cc.find('Canvas/Moves/NumberOfPossibleMoves/NumberOfPossibleMovesText').getComponent(cc.Label).string = 
-                        'Доступно\n' + cc.find('Canvas/GameController').getComponent('BlocksController').NumberOfMoves()})
-                    const callFuncOnMouse = cc.callFunc(function () {cc.find('/Canvas/GameController').getComponent('BlocksController').OnMouseForAllBlocks ()})
+                        numberOfPossibleMovesText.getComponent(cc.Label).string = 'Доступно\n' + blocksController.NumberOfMoves()})
+                    const callFuncOnMouse = cc.callFunc(function () {
+                        blocksController.OnMouseForAllBlocks ()})
                     const seq = cc.sequence(actionMove,delay, callFuncNumberOfMoves, callFuncOnMouse)
                     allBlocks[i].runAction(seq)
                 } else {
@@ -211,22 +222,25 @@ cc.Class({
 
     NumberOfMoves () {
         this.OffMouseForAllBlocks ()
+        const gameController = this.node.getComponent('GameController')
         const allBlocks = this.FindAllBlocks ()
+        const blockController = allBlocks[0].getComponent('BlockController')
         let _numberOfMoves = 0
         for (var i = 0; i < allBlocks.length; i++) {
-            if (!allBlocks[i].getComponent('BlockController').blockOmitted) {
+            const _blockController = allBlocks[i].getComponent('BlockController')
+            if (!_blockController.blockOmitted) {
                 const countBefore = this.CountOmittedBlocks ()
-                allBlocks[i].getComponent('BlockController').EnterToBlock ()
+                _blockController.EnterToBlock ()
                 const countAfter = this.CountOmittedBlocks ()
                 if (countAfter - countBefore >= this.K) {
                     _numberOfMoves ++
                 }           
             }
         }
-        allBlocks[0].getComponent('BlockController').LeaveToBlock()               
+        blockController.LeaveToBlock()               
         this.OnMouseForAllBlocks ()
-        if (this.node.getComponent('GameController').numberOfStirring == 0 && _numberOfMoves == 0) {
-            this.node.getComponent('GameController').EndGame () 
+        if (gameController._numberOfStirring == 0 && _numberOfMoves == 0) {
+            gameController.EndGame () 
         }
         return _numberOfMoves     
     },

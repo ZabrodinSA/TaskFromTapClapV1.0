@@ -174,7 +174,7 @@
       "array": [
         82,
         42,
-        473.5116251154767,
+        483.2421753117168,
         0,
         0,
         0,
@@ -2194,6 +2194,15 @@
     "_minWidth": 1,
     "_maxHeight": 10,
     "_minHeight": 1,
+    "widthNode": {
+      "__id__": 14
+    },
+    "heightNode": {
+      "__id__": 26
+    },
+    "messageNode": {
+      "__id__": 46
+    },
     "_id": "8dp1yxdkVEg5ATn6Kew04u"
   },
   {
