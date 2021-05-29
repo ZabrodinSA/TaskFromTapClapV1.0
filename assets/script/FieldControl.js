@@ -41,26 +41,26 @@ cc.Class({
             const _y = this.node.height / 1.5
             const p1 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, -_y), p1)
             const p2 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, _y), p2)
-            var results = cc.director.getPhysicsManager().rayCast (p1, p2, cc.RayCastType.All)
+            const results = cc.director.getPhysicsManager().rayCast (p1, p2, cc.RayCastType.All)
             
             if (results.length < this.numberOfLines) {
                 this.CreatingBlocks (columnNumber, this.numberOfLines - results.length)
             }
         }
-        var callFunc = cc.callFunc(function () {
+        const callFunc = cc.callFunc(function () {
             cc.find('Canvas/Moves/NumberOfPossibleMoves/NumberOfPossibleMovesText').getComponent(cc.Label).string = 
             'Доступно\n' + cc.find('Canvas/GameController').getComponent('BlocksController').NumberOfMoves()})
-        var delay = cc.delayTime(this.block.data.getComponent('BlockController').blockSpawnTime)
-        var seq = cc.sequence(delay, callFunc)
+        const delay = cc.delayTime(this.block.data.getComponent('BlockController').blockSpawnTime)
+        const seq = cc.sequence(delay, callFunc)
         this.node.runAction(seq)
     },
 
     CreatingBlocks (columnNumber, numberOfBlocks) {
         const sizeCollliderBlock = this.block.data.getComponent(cc.PhysicsBoxCollider).size
         const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width/2
-        var _y = (this.numberOfLines - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height/2
+        let _y = (this.numberOfLines - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height/2
         for (var i = 0; i < numberOfBlocks; i++){
-           var block = cc.instantiate(this.block)
+           const block = cc.instantiate(this.block)
            block.setPosition(_x, _y) 
            this.node.addChild(block, this.numberOfLines - i, `Block`)
            _y = _y - sizeCollliderBlock.height / this.node.scaleY                  

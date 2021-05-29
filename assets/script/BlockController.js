@@ -52,7 +52,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        var sprite = this.node.getComponent(cc.Sprite)
+        const sprite = this.node.getComponent(cc.Sprite)
         const spriteFrames = this.blocksAtlas.getSpriteFrames()
         sprite.spriteFrame = spriteFrames[cc.math.randomRangeInt(0, spriteFrames.length)]
         this.colorBlock = sprite.spriteFrame.name
@@ -62,9 +62,9 @@ cc.Class({
         this.scaleNotOmittedX = 1 / this.node.parent.scaleX 
         this.scaleNotOmittedY = 1 / this.node.parent.scaleY 
         this.node.setScale(0, 0)
-        var action = cc.scaleTo(this.blockSpawnTime, this.scaleNotOmittedX, this.scaleNotOmittedY)
-        var callFunc = cc.callFunc(function () {this.OnMouse ()}, this)
-        var seq = cc.sequence(action, callFunc)
+        const action = cc.scaleTo(this.blockSpawnTime, this.scaleNotOmittedX, this.scaleNotOmittedY)
+        const callFunc = cc.callFunc(function () {this.OnMouse ()}, this)
+        const seq = cc.sequence(action, callFunc)
         this.node.runAction(seq)
     },
 
@@ -93,15 +93,15 @@ cc.Class({
     EnterToBlock () {
         this.blockOmitted = true
         this.node.setScale(cc.v2(this.scaleOmittedX, this.scaleOmittedY))
-        var adjacentBlocks = [this.RaysFromTheBlock(this.node, 'Up'),
+        const adjacentBlocks = [this.RaysFromTheBlock(this.node, 'Up'),
                               this.RaysFromTheBlock(this.node, 'Down'),
                               this.RaysFromTheBlock(this.node, 'Left'),
                               this.RaysFromTheBlock(this.node, 'Right')]
         for (var i = 0; i < adjacentBlocks.length; i++) {
             if (adjacentBlocks[i].length != 0 ) {
-                var resultBlock = adjacentBlocks[i][0].collider.node
-                var spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
-                var resultBlockController = resultBlock.getComponent('BlockController')
+                const resultBlock = adjacentBlocks[i][0].collider.node
+                const spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
+                const resultBlockController = resultBlock.getComponent('BlockController')
                 if (!resultBlockController.blockOmitted && this.colorBlock == spriteFrame.name)
                 resultBlockController.EnterToBlock()
             }
@@ -111,7 +111,7 @@ cc.Class({
     LeaveToBlock () {
         this.blockOmitted = false
         this.node.setScale(cc.v2(this.scaleNotOmittedX, this.scaleNotOmittedY))
-        var nodes = cc.find('/Canvas/GameController').getComponent('BlocksController').FindAllBlocks ()
+        const nodes = cc.find('/Canvas/GameController').getComponent('BlocksController').FindAllBlocks ()
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i].getComponent('BlockController').blockOmitted) {
                 nodes[i].getComponent('BlockController').LeaveToBlock ()
@@ -121,24 +121,25 @@ cc.Class({
     },
 
     RaysFromTheBlock (block, direction) {
-        var pStart = block.parent.convertToWorldSpaceAR(new cc.Vec2(
+        const pStart = block.parent.convertToWorldSpaceAR(new cc.Vec2(
             block.x, block.y), pStart)
+        let result
         if (direction == 'Up') {
-            var pUp = block.parent.convertToWorldSpaceAR(new cc.Vec2(
+            const pUp = block.parent.convertToWorldSpaceAR(new cc.Vec2(
                 block.x, block.y + block.height / block.parent.scaleY), pUp)
-            var result = cc.director.getPhysicsManager().rayCast (pStart, pUp, cc.RayCastType.Closest)
+            result = cc.director.getPhysicsManager().rayCast (pStart, pUp, cc.RayCastType.Closest)
         } else if (direction == 'Down') {
-            var pDown = block.parent.convertToWorldSpaceAR(new cc.Vec2(
+            const pDown = block.parent.convertToWorldSpaceAR(new cc.Vec2(
                 block.x, block.y - block.height / block.parent.scaleY), pDown)
-            var result = cc.director.getPhysicsManager().rayCast (pStart, pDown, cc.RayCastType.Closest)    
+            result = cc.director.getPhysicsManager().rayCast (pStart, pDown, cc.RayCastType.Closest)    
         } else if (direction == 'Right') {
-            var pRight = block.parent.convertToWorldSpaceAR(new cc.Vec2(
+            const pRight = block.parent.convertToWorldSpaceAR(new cc.Vec2(
                 block.x + block.width / block.parent.scaleX, block.y), pRight)
-            var result = cc.director.getPhysicsManager().rayCast (pStart, pRight, cc.RayCastType.Closest)
+            result = cc.director.getPhysicsManager().rayCast (pStart, pRight, cc.RayCastType.Closest)
         } else if (direction == 'Left') {
-            var pLeft = block.parent.convertToWorldSpaceAR(new cc.Vec2(
+            const pLeft = block.parent.convertToWorldSpaceAR(new cc.Vec2(
                 block.x - block.width / block.parent.scaleX, block.y), pLeft)
-            var result = cc.director.getPhysicsManager().rayCast (pStart, pLeft, cc.RayCastType.Closest)
+            result = cc.director.getPhysicsManager().rayCast (pStart, pLeft, cc.RayCastType.Closest)
         }
         return result
     },

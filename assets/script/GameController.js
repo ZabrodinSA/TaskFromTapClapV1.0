@@ -55,10 +55,10 @@ cc.Class({
 
     ReduceTheNumberOfMoves () {
         this.numberOfMoves --
+        this.SetNumberOfMoves (this.numberOfMoves)
         if (this.numberOfMoves == 0) {
             this.EndGame () 
         } 
-        this.SetNumberOfMoves (this.numberOfMoves)
     },
 
     InitialNumberOfStirring () {
@@ -107,15 +107,15 @@ cc.Class({
         } else {
             Global.status = 'Вы проиграли'
         }
-        var callFuncAction = cc.callFunc(function () {
-            var action = cc.scaleTo (5, 0, 0)
+        const callFuncAction = cc.callFunc(function () {
+            const action = cc.scaleTo (5, 0, 0)
             cc.find('Canvas/Field').runAction(action)
         })
-        var callFuncEnd = cc.callFunc(function () {
+        const callFuncEnd = cc.callFunc(function () {
             cc.director.loadScene('EndGame')
         })
-        var delay = cc.delayTime(this.endTime)
-        var seq = cc.sequence(callFuncAction, delay, callFuncEnd)
+        const delay = cc.delayTime(this.endTime)
+        const seq = cc.sequence(callFuncAction, delay, callFuncEnd)
         this.node.runAction(seq)
     },
 
