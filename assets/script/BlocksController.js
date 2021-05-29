@@ -9,6 +9,10 @@ cc.Class({
         blocksMove: {
             type: Boolean,
             default: false
+        },
+        mixingTime: {
+            type: cc.Float,
+            default: 3
         }
     },
 
@@ -160,7 +164,7 @@ cc.Class({
             this.OffMouseForAllBlocks ()
             gameController.ReduceTheNumberOfStirring()
             var allBlocks = this.FindAllBlocks ()
-            const moveTime = 5 * allBlocks[0].getComponent('BlockController').blockMovementTime
+            const moveTime = this.mixingTime
             var allPositionAndIndex = []
 
             for (var i = 0; i < allBlocks.length; i++) {
@@ -179,7 +183,7 @@ cc.Class({
                 var actionMove = cc.callFunc( function (block, blockPosition) {
                     block.runAction(cc.moveTo(moveTime, blockPosition.x, blockPosition.y))
                 }, allBlocks[i], allPositionAndIndex[i].position)
-                var delay = cc.delayTime(moveTime + 0.001) 
+                var delay = cc.delayTime(moveTime) 
                 allBlocks[i].zIndex = allPositionAndIndex[i].index
                 if ( i == allBlocks.length - 1) {
                     var callFuncNumberOfMoves = cc.callFunc(function () {

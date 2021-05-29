@@ -42,7 +42,11 @@ cc.Class({
         scaleNotOmittedY: {
             type: cc.Float,
             default: 1
-        }
+        },
+        sizeScale: {
+            type: cc.Float,
+            default: 0.9
+        }, 
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -53,8 +57,8 @@ cc.Class({
         sprite.spriteFrame = spriteFrames[cc.math.randomRangeInt(0, spriteFrames.length)]
         this.colorBlock = sprite.spriteFrame.name
 
-        this.scaleOmittedX = 1 / this.node.parent.scaleX * 0.9
-        this.scaleOmittedY = 1 / this.node.parent.scaleY * 0.9
+        this.scaleOmittedX = 1 / this.node.parent.scaleX * this.sizeScale
+        this.scaleOmittedY = 1 / this.node.parent.scaleY * this.sizeScale
         this.scaleNotOmittedX = 1 / this.node.parent.scaleX 
         this.scaleNotOmittedY = 1 / this.node.parent.scaleY 
         this.node.setScale(0, 0)
@@ -78,9 +82,6 @@ cc.Class({
         this.node.on('mousedown', () => {
             cc.find('/Canvas/GameController').getComponent('BlocksController').ClickHandler()
         })
-        // this.node.on('touchstart', () => {
-        //     cc.find('/Canvas/GameController').getComponent('BlocksController').ClickHandler()
-        // })
     },
 
     OffMouse () {

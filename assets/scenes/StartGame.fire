@@ -174,7 +174,7 @@
       "array": [
         82,
         42,
-        506.6248612138966,
+        473.5116251154767,
         0,
         0,
         0,
@@ -2190,6 +2190,10 @@
       "__id__": 7
     },
     "_enabled": true,
+    "_maxWidth": 10,
+    "_minWidth": 1,
+    "_maxHeight": 10,
+    "_minHeight": 1,
     "_id": "8dp1yxdkVEg5ATn6Kew04u"
   },
   {

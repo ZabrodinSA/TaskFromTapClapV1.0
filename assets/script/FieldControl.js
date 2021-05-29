@@ -9,7 +9,11 @@ cc.Class({
         numberOfLines: {
             type: cc.Integer,
             default: 10
-        },       
+        },
+        sizeScale: {
+            type: cc.Float,
+            default: 0.1
+        },         
         block: cc.Prefab,
     },
 
@@ -28,14 +32,15 @@ cc.Class({
     // update (dt) {},
 
     SetSizeField () {
-        this.node.setScale(cc.Vec2(0.1*this.numberOfCollums, 0.1*this.numberOfLines))
+        this.node.setScale(cc.Vec2(this.sizeScale * this.numberOfCollums, this.sizeScale * this.numberOfLines))
     },
 
     CheckingTheNumberOfBlocks () {
         for (var columnNumber = 0; columnNumber < this.numberOfCollums; columnNumber++){
             const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width/2
-            const p1 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, -400), p1)
-            const p2 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, 400), p2)
+            const _y = this.node.height / 1.5
+            const p1 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, -_y), p1)
+            const p2 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, _y), p2)
             var results = cc.director.getPhysicsManager().rayCast (p1, p2, cc.RayCastType.All)
             
             if (results.length < this.numberOfLines) {
@@ -45,7 +50,7 @@ cc.Class({
         var callFunc = cc.callFunc(function () {
             cc.find('Canvas/Moves/NumberOfPossibleMoves/NumberOfPossibleMovesText').getComponent(cc.Label).string = 
             'Доступно\n' + cc.find('Canvas/GameController').getComponent('BlocksController').NumberOfMoves()})
-        var delay = cc.delayTime(this.block.data.getComponent('BlockController').blockSpawnTime + 0.01)
+        var delay = cc.delayTime(this.block.data.getComponent('BlockController').blockSpawnTime)
         var seq = cc.sequence(delay, callFunc)
         this.node.runAction(seq)
     },
