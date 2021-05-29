@@ -31,36 +31,61 @@ cc.Class({
      },
 
     start () {
-        if (Global.width > Global.height) {
-            this.numberOfMoves =  Global.width + 1
-        } else {
-            this.numberOfMoves = Global.height + 1
-        }
-        this.numberOfStirring ++
-        this.winScore = Global.width * Global.height
-        this.SetNumberOfMoves ()
-        this.SetNumberOfStirring ()
+        this.SetWinScore (this.InitialWinScore ())
+        this.SetNumberOfMoves (this.InitialNumberOfMoves ())
+        this.SetNumberOfStirring (this.InitialNumberOfStirring ())
         this.SetScore (0) 
     },
 
     // update (dt) {},
 
-    SetNumberOfMoves () {
+    InitialNumberOfMoves () {
+        if (Global.width > Global.height) {
+            return Global.width
+        } else {
+            return Global.height
+        }        
+    },
+
+    SetNumberOfMoves (numberOfMoves) {
+        this.numberOfMoves = numberOfMoves
+        cc.find('Canvas/Moves/NumberOfMovesRemaining/NumberOfMovesRemainingText').getComponent(cc.Label).string = 
+        'Осталось\n' + numberOfMoves  
+    },
+
+    ReduceTheNumberOfMoves () {
         this.numberOfMoves --
         if (this.numberOfMoves == 0) {
             this.EndGame () 
         } 
-        cc.find('Canvas/Moves/NumberOfMovesRemaining/NumberOfMovesRemainingText').getComponent(cc.Label).string = 
-        'Осталось\n' + this.numberOfMoves       
+        this.SetNumberOfMoves (this.numberOfMoves)
     },
 
-    SetNumberOfStirring () {
+    InitialNumberOfStirring () {
+        return this.numberOfStirring
+    },
+
+    SetNumberOfStirring (numberOfStirring) {
+        this.numberOfStirring = numberOfStirring
+        cc.find('Canvas/Moves/NumberOfStirring/Background/NumberOfStirringText').getComponent(cc.Label).string = 
+        'ПЕРЕМЕШИВАНИЙ\n' + numberOfStirring
+    },
+
+    ReduceTheNumberOfStirring () {
         this.numberOfStirring --
         if (this.numberOfStirring < 0) {
             this.numberOfStirring = 0
         } 
-        cc.find('Canvas/Moves/NumberOfStirring/Background/NumberOfStirringText').getComponent(cc.Label).string = 
-        'ПЕРЕМЕШИВАНИЙ\n' + this.numberOfStirring
+        this.SetNumberOfStirring (this.numberOfStirring)
+    },
+
+    InitialWinScore () {
+        this.winScore = Global.width * Global.height
+    },
+
+    
+    SetWinScore (winScore) {
+        this.WinScore = winScore
     },
 
     SetScore (addScore) {

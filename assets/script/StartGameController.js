@@ -2,16 +2,33 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        _maxWidth: {
+            type: cc.Integer,
+            default: 10
+        },
+        _minWidth: {
+            type: cc.Integer,
+            default: 1
+        },
+        _maxHeight: {
+            type: cc.Integer,
+            default: 10
+        },
+        _minHeight: {
+            type: cc.Integer,
+            default: 1
+        },
+
         width: {
             get () {
                 return this._width
             },
             set (value) {
-                if (value > 0){
-                    this._width = value > 10 ? 10 : Math.ceil (value)   
+                if (value > this._minWidth){
+                    this._width = value > this._maxWidth ? this._maxWidth : Math.ceil (value)   
                 }
                 else {
-                    this._width = 1
+                    this._width = this._minWidth
                 } 
             }, 
         },
@@ -21,11 +38,11 @@ cc.Class({
                 return this._height
             },
             set (value) {
-                if (value > 0){
-                    this._height = value > 10 ? 10 : Math.ceil (value)     
+                if (value > this._minHeight){
+                    this._height = value > this._maxHeight ? this._maxHeight : Math.ceil (value)     
                 }
                 else {
-                    this._height = 1
+                    this._height = this._minHeight
                 } 
             }, 
         },

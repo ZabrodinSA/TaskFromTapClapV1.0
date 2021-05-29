@@ -45,7 +45,7 @@ cc.Class({
 
     DestroyAllOmittedBlocks (allOmittedBlocks, fieldControl) {
         var gameController = cc.find('Canvas/GameController').getComponent('GameController')
-        gameController.SetNumberOfMoves()
+        gameController.ReduceTheNumberOfMoves()
         gameController.SetScore(allOmittedBlocks.length)
         const moveTime = allOmittedBlocks[0].getComponent('BlockController').blockMovementTime
         const distance = allOmittedBlocks[0].getComponent(cc.PhysicsBoxCollider).size.height / allOmittedBlocks[0].parent.scaleY
@@ -158,7 +158,7 @@ cc.Class({
         var gameController = cc.find('Canvas/GameController').getComponent('GameController')
         if (gameController.numberOfStirring > 0 && !this.blocksMove) {
             this.OffMouseForAllBlocks ()
-            gameController.SetNumberOfStirring()
+            gameController.ReduceTheNumberOfStirring()
             var allBlocks = this.FindAllBlocks ()
             const moveTime = 5 * allBlocks[0].getComponent('BlockController').blockMovementTime
             var allPositionAndIndex = []
