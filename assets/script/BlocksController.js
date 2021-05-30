@@ -38,7 +38,7 @@ cc.Class({
         const allBlocks = this.FindAllBlocks()
         const allOmittedBlocks = []
         const allNotOmittedBlocks = []
-        for (var i = 0; i < allBlocks.length; i++) {
+        for (let i = 0; i < allBlocks.length; i++) {
             if (allBlocks[i].getComponent('BlockController').blockOmitted) {
                 allOmittedBlocks.push(allBlocks[i])
             } else {
@@ -65,7 +65,7 @@ cc.Class({
         let delay = 0
         let actions = [[]]
         actions.length = allOmittedBlocks.length
-        for (var i = 0; i < actions.length; i++) {
+        for (let i = 0; i < actions.length; i++) {
             actions[i] = new Array(0)
         }
         function move (_block, _count) {
@@ -74,13 +74,13 @@ cc.Class({
         function destroyBlock (_block) {
             _block.destroy()            
         }
-        for (var i = 0; i < allOmittedBlocks.length; i++) {
+        for (let i = 0; i < allOmittedBlocks.length; i++) {
             const actionScale = cc.scaleTo(destructionTime, 0, 0)
             actions[i].push(actionScale)
             let countMove = 1
             const result = allOmittedBlocks[i].getComponent('BlockController').RaysFromTheBlock(allOmittedBlocks[i], 'Up')
                 if (result.length != 0) {
-                    var resultBlock =result[0].collider.node
+                    let resultBlock =result[0].collider.node
                     if (!resultBlock.getComponent('BlockController').blockOmitted) {
                         SetCountMove (allOmittedBlocks[i])
                         MoveAllTopBlocks( resultBlock, countMove)
@@ -117,12 +117,12 @@ cc.Class({
                 }
             }             
         }
-        for (var i = 0; i < allOmittedBlocks.length; i++) {
+        for (let i = 0; i < allOmittedBlocks.length; i++) {
             const callFuncDestroy = cc.callFunc(destroyBlock, allOmittedBlocks[i])
             const actionDelayMove = cc.delayTime(delay)
             actions[i].push(actionDelayMove)
             if ( i == allOmittedBlocks.length - 1) {
-                var callFuncCreate = cc.callFunc(function () {fieldControl.CheckingTheNumberOfBlocks ()})
+                let callFuncCreate = cc.callFunc(function () {fieldControl.CheckingTheNumberOfBlocks ()})
                 actions[i].push(callFuncCreate)
             }
             const actionDelaySpawn = cc.delayTime(spawnTime)
@@ -142,7 +142,7 @@ cc.Class({
     OnMouseForAllBlocks () { 
         this._blocksMove = false
         const allBlocks = this.FindAllBlocks()
-        for (var i = 0; i < allBlocks.length; i++) {
+        for (let i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OnMouse()
         }
     },
@@ -150,7 +150,7 @@ cc.Class({
     OffMouseForAllBlocks () {
         this._blocksMove = true
         const allBlocks = this.FindAllBlocks()
-        for (var i = 0; i < allBlocks.length; i++) {
+        for (let i = 0; i < allBlocks.length; i++) {
             allBlocks[i].getComponent('BlockController').OffMouse()
         }
     },
@@ -158,7 +158,7 @@ cc.Class({
     FindAllBlocks () {
         const allNodes = this.fieldNode.children
         let allBlocks = []
-        for (var i = 0; i < allNodes.length; i++) {
+        for (let i = 0; i < allNodes.length; i++) {
             if (allNodes[i].name == 'Block' ) {
                 allBlocks.push(allNodes[i])
             }
@@ -176,7 +176,7 @@ cc.Class({
             const moveTime = this.mixingTime
             let allPositionAndIndex = []
 
-            for (var i = 0; i < allBlocks.length; i++) {
+            for (let i = 0; i < allBlocks.length; i++) {
                 const temp = {
                     position: cc.Vec3, 
                     index: cc.Integer
@@ -188,7 +188,7 @@ cc.Class({
         
             allPositionAndIndex = shuffle (allPositionAndIndex)
 
-            for (var i = 0; i < allBlocks.length; i++) {
+            for (let i = 0; i < allBlocks.length; i++) {
                 const actionMove = cc.callFunc( function (block, blockPosition) {
                     block.runAction(cc.moveTo(moveTime, blockPosition.x, blockPosition.y))
                 }, allBlocks[i], allPositionAndIndex[i].position)
@@ -210,7 +210,7 @@ cc.Class({
 
         function shuffle(arr){
             let j, temp;
-            for(var i = arr.length - 1; i > 0; i--){
+            for(let i = arr.length - 1; i > 0; i--){
                 j = Math.floor(Math.random()*(i + 1));
                 temp = arr[j];
                 arr[j] = arr[i];
@@ -226,7 +226,7 @@ cc.Class({
         const allBlocks = this.FindAllBlocks ()
         const blockController = allBlocks[0].getComponent('BlockController')
         let _numberOfMoves = 0
-        for (var i = 0; i < allBlocks.length; i++) {
+        for (let i = 0; i < allBlocks.length; i++) {
             const _blockController = allBlocks[i].getComponent('BlockController')
             if (!_blockController.blockOmitted) {
                 const countBefore = this.CountOmittedBlocks ()
@@ -248,7 +248,7 @@ cc.Class({
     CountOmittedBlocks () {
         const _allBlocks = this.FindAllBlocks()
         let count = 0
-        for (var i = 0; i <_allBlocks.length; i++) {
+        for (let i = 0; i <_allBlocks.length; i++) {
             if (_allBlocks[i].getComponent('BlockController').blockOmitted) {
                 count ++ 
             }

@@ -102,7 +102,7 @@ cc.Class({
                               this.RaysFromTheBlock(this.node, 'Down'),
                               this.RaysFromTheBlock(this.node, 'Left'),
                               this.RaysFromTheBlock(this.node, 'Right')]
-        for (var i = 0; i < adjacentBlocks.length; i++) {
+        for (let i = 0; i < adjacentBlocks.length; i++) {
             if (adjacentBlocks[i].length != 0 ) {
                 const resultBlock = adjacentBlocks[i][0].collider.node
                 const spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
@@ -117,7 +117,7 @@ cc.Class({
         this.blockOmitted = false
         this.node.setScale(cc.v2(this._scaleNotOmittedX, this._scaleNotOmittedY))
         const nodes = this.blocksController.FindAllBlocks ()
-        for (var i = 0; i < nodes.length; i++) {
+        for (let i = 0; i < nodes.length; i++) {
             const blockController = nodes[i].getComponent('BlockController')
             if (blockController.blockOmitted) {
                 blockController.LeaveToBlock ()

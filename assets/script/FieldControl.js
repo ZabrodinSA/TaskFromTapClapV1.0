@@ -44,9 +44,9 @@ cc.Class({
     },
 
     CheckingTheNumberOfBlocks () {
-        for (var columnNumber = 0; columnNumber < this._numberOfCollums; columnNumber++){
-            const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width / 2 //
-            const _y = this.node.height / 1.5                                                                //
+        for (let columnNumber = 0; columnNumber < this._numberOfCollums; columnNumber++){
+            const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width / 2 // координата х середины каждого столбца 
+            const _y = this.node.height / 1.5                                                                // координата y ниже первой строки 
             const p1 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, -_y), p1)
             const p2 = this.node.convertToWorldSpaceAR (new cc.Vec2(_x, _y), p2)
             const results = cc.director.getPhysicsManager().rayCast (p1, p2, cc.RayCastType.All)
@@ -66,9 +66,9 @@ cc.Class({
 
     CreatingBlocks (columnNumber, numberOfBlocks) {
         const sizeCollliderBlock = this.block.data.getComponent(cc.PhysicsBoxCollider).size
-        const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width / 2    //
-        let _y = (this._numberOfLines - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height / 2    //
-        for (var i = 0; i < numberOfBlocks; i++){
+        const _x = (columnNumber + 0.5) * this.block.data.width / this.node.scaleX - this.node.width / 2    //координата х для создания блока 
+        let _y = (this._numberOfLines - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height / 2    //координата y для создания блока 
+        for (let i = 0; i < numberOfBlocks; i++){
            const block = cc.instantiate(this.block)
            block.setPosition(_x, _y) 
            this.node.addChild(block, this._numberOfLines - i, `Block`)
