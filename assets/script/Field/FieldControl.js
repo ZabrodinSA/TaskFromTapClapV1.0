@@ -44,27 +44,74 @@ cc.Class({
     ClickHandler () {
         const gameController = this.gameControllerNode.getComponent('GameController')
         gameController.ClickHandler()
-        cc.log('handlerField')
+    },
+
+    DestroyBlocks (omittedBlocks, notOmittedBlocks) {
+        const fieldControl = this
+        fieldControl.MouseOff ()
+
+        let actions = []
+        const blockRenderer = this.block.data.getComponent('BlockRenderer')
+        const delayDestruction = cc.delayTime (blockRenderer.destructionTime)
+
+        for (let i = 0; i < omittedBlocks.length; i++) {                            
+            const _blockRenderer = omittedBlocks[i].getComponent('BlockRenderer')
+            const callFuncDestroy = cc.callFunc(function () {
+                _blockRenderer.DestroyBlock ()
+            }) 
+            actions.push(callFuncDestroy)
+        }
+        actions.push(delayDestruction)
+
+        const callFuncMove = cc.callFunc (function () {
+            fieldControl.MoveBlocks (notOmittedBlocks)
+        })
+        actions.push(callFuncMove)
+
+        const seq = cc.sequence (actions)
+        this.node.runAction (seq)
+    },
+
+    MoveBlocks (notOmittedBlocks) {
+        const fieldControl = this
+        const blockRenderer = this.block.data.getComponent('BlockRenderer')
+        const delayMove = cc.delayTime (blockRenderer.blockMovementTime)
+        let actions = []
+
+        for (let i = 0; i < notOmittedBlocks.length; i++) {
+            const _blockRenderer = notOmittedBlocks[i].getComponent('BlockRenderer')
+            const callFuncMove = cc.callFunc(function () {
+                _blockRenderer.MoveBlock ()
+            }) 
+            actions.push(callFuncMove)
+        }
+        actions.push(delayMove)
+        const callFuncChek = cc.callFunc(function () {
+            fieldControl.CheckingTheNumberOfBlocks ()
+        })
+        actions.push(callFuncChek)
+
+        const seq = cc.sequence (actions)
+        this.node.runAction (seq)
     },
 
     CheckingTheNumberOfBlocks () {
         const fieldControl = this
         fieldControl.MouseOff ()
-
         const blockRenderer = this.block.data.getComponent('BlockRenderer')
         let actions = []
         const delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
         const delayMove = cc.delayTime (blockRenderer.blockMovementTime)   
-        
         for (let j = 0; j < Global.height; j++) {
-            for (let i = 0; i < Global.width; i++) {
-                if (Global.blocks[i].length < Global.height) {
-                    const callFuncCreate = cc.callFunc (function () {
-                        fieldControl.CreatingBlock(i, j)
-                    })
-                    actions.push(callFuncCreate)
-                }
+            for (let i = 0; i < Global.width; i++) {                
+                const callFuncCreate = cc.callFunc (function () {
+                    fieldControl.CreatingBlock(i, j)
+                })
+                if (Global.blocks[i][j] == undefined) {
+                    actions.push(callFuncCreate)   
+                }             
             }
+
             if (j == Global.height - 1) {
                 const callFuncMouseOn = cc.callFunc (function () {
                     fieldControl.MouseOn ()
@@ -73,10 +120,9 @@ cc.Class({
                 actions.push(callFuncMouseOn)
             } else {
                 actions.push(delaySpaw)
-                actions.push(delayMove)
             }
+            actions.push(delayMove)                
         }
-
         const seq = cc.sequence (actions)
         this.node.runAction (seq)
     },

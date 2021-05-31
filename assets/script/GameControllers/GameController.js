@@ -51,8 +51,8 @@ cc.Class({
      },
 
     start () {
-        Global.width = 5
-        Global.height = 3
+        Global.width = 7
+        Global.height = 7
         Global.blocks = new Array (Global.width)
         for (let i = 0; i < Global.blocks.length; i++) {
             Global.blocks[i] = new Array (0)
@@ -122,7 +122,44 @@ cc.Class({
     },
 
     ClickHandler () {
-        cc.log('handlerGame')
+        const fieldControl = this.fieldNode.getComponent('FieldControl')
+        let omittedBlocks = []
+        let notOmittedBlocks = []
+        for (let i = 0; i < Global.blocks.length; i++) {
+            for (let j = 0; j < Global.blocks[i].length; j++) {
+                const blockController = Global.blocks[i][j].getComponent('BlockController')
+                if (blockController._blockOmitted) {
+                    // omittedBlocks.push({column: i, line: j})
+                    omittedBlocks.push(Global.blocks[i][j])
+                } else {
+                    // notOmittedBlocks.push({column: i, line: j})
+                    notOmittedBlocks.push(Global.blocks[i][j])
+                }
+            }
+        }
+
+
+        if (omittedBlocks.length >= this.K) {                
+            // this.AddScore (allOmittedBlocks.length)
+            this.DeleteBlocksFromGlobal (omittedBlocks)
+
+            fieldControl.DestroyBlocks (omittedBlocks, notOmittedBlocks)
+        }
+    },
+
+    DeleteBlocksFromGlobal (omittedBlocks) {
+        for (let i = 0; i < omittedBlocks.length; i++) {
+            const blockController = omittedBlocks[i].getComponent('BlockController')
+            Global.blocks[blockController._column].splice(blockController._line, 1)
+            for (let i = 0; i < Global.blocks.length; i++) {
+                for (let j = 0; j < Global.blocks[i].length; j++) {
+                    const block = Global.blocks[i][j]
+                    const blockController = block.getComponent('BlockController') 
+                    block.zIndex = j               
+                    blockController._line = j                                        
+                }
+            }
+        }        
     },
 
     EndGame () {

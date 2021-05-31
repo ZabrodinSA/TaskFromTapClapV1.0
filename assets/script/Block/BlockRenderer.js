@@ -50,7 +50,6 @@ cc.Class({
         const _y = (blockController._line + 0.5) * sizeCollliderBlock.height / field.scaleY - field.height / 2   //координата y для позиции блока
         const distanceInLines =  (block.y - _y)/(sizeCollliderBlock.height / field.scaleY)
         const action = cc.moveTo(this.blockMovementTime * distanceInLines, _x, _y)
-        
         block.runAction(action)
     },
 

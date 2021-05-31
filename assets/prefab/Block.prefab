@@ -195,9 +195,9 @@
     "blocksAtlas": {
       "__uuid__": "57d8b92f-fc09-4869-b434-46eeeddd0a00"
     },
-    "blockSpawnTime": 1,
-    "blockMovementTime": 0.3,
-    "destructionTime": 0.7,
+    "blockSpawnTime": 0.5,
+    "blockMovementTime": 0.5,
+    "destructionTime": 0.5,
     "_id": ""
   },
   {
