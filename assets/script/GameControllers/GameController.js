@@ -14,10 +14,6 @@ cc.Class({
             type: cc.Integer,
             default:  0
         },
-        _numberOfStirring: {
-            type: cc.Integer,
-            default:  1
-        },
         numberOfMovesRemainingTextNode: {
             type: cc.Node,
             default:  undefined
@@ -51,10 +47,16 @@ cc.Class({
      },
 
     start () {
+        Global.width = 5
+        Global.height = 3
+        Global.blocks = new Array (Global.width)
+        for (let i = 0; i < Global.blocks.length; i++) {
+            Global.blocks[i] = new Array (0)
+        }
         this.SetWinScore (this.InitialWinScore ())
         this.SetNumberOfMoves (this.InitialNumberOfMoves ())
         this.SetNumberOfStirring (this.InitialNumberOfStirring ())
-        this.SetScore (0) 
+        Global.currentScore = 0 
     },
 
     // update (dt) {},
@@ -68,33 +70,33 @@ cc.Class({
     },
 
     SetNumberOfMoves (numberOfMoves) {
-        this._numberOfMoves = numberOfMoves
-        this.numberOfMovesRemainingTextNode.getComponent(cc.Label).string = 'Осталось\n' + numberOfMoves  
+        Global.numberOfMoves = numberOfMoves
     },
 
     ReduceTheNumberOfMoves () {
-        this._numberOfMoves --
-                this.SetNumberOfMoves (this._numberOfMoves)
-        if (this._numberOfMoves == 0) {
+        Global.numberOfMoves --
+        if (Global.numberOfMoves == 0) {
             this.EndGame () 
         } 
     },
 
     InitialNumberOfStirring () {
-        return this._numberOfStirring
+        if (Global.width > Global.height) {
+            return Global.width - Global.height
+        } else {
+            return Global.height - Global.width
+        }
     },
 
     SetNumberOfStirring (numberOfStirring) {
-        this._numberOfStirring = numberOfStirring
-        this.numberOfStirringTextNode.getComponent(cc.Label).string = 'ПЕРЕМЕШИВАНИЙ\n' + numberOfStirring
+        Global.numberOfStirring = numberOfStirring
     },
 
     ReduceTheNumberOfStirring () {
-        this._numberOfStirring --
-        if (this._numberOfStirring < 0) {
-            this._numberOfStirring = 0
+        Global.numberOfStirring --
+        if (Global.numberOfStirring < 0) {
+            Global.numberOfStirring = 0
         } 
-        this.SetNumberOfStirring (this._numberOfStirring)
     },
 
     InitialWinScore () {
@@ -103,42 +105,40 @@ cc.Class({
 
     
     SetWinScore (winScore) {
-        this._winScore = winScore
+        Global.winScore = winScore
     },
 
-    SetScore (addScore) {
-        this._currentScore += addScore
-        this.currentScoreTextNode.getComponent(cc.Label).string = this._currentScore + ' / ' + this._winScore
-        if (this._currentScore < this._winScore) {
-        this.scoreNode.getComponent(cc.ProgressBar).progress = this._currentScore / this._winScore
+    AddScore (addScore) {
+        Global.currentScore += addScore
+        if (Global.currentScore < this._winScore) {
+
         } else {
-            this.scoreNode.getComponent(cc.ProgressBar).progress = 1
             this.EndGame ()
         }
     },
     
     EndGame () {
-        if (this._currentScore >= this._winScore) {
+        if (Global.currentScore >= Global.winScore) {
             Global.status = 'Вы выйграли!'
         } else {
             Global.status = 'Вы проиграли'
         }
-        this.EndGameAction ()
+        this.fieldNode.getComponent('FieldDestroyer').DestroyField()
     },
 
-    EndGameAction () {
-        const field = this.fieldNode
-        const callFuncAction = cc.callFunc(function () {
-            const action = cc.scaleTo (5, 0, 0)
-            field.runAction(action)
-        })
-        const callFuncEnd = cc.callFunc(function () {
-            cc.director.loadScene('EndGame')
-        })
-        const delay = cc.delayTime(this.endTime)
-        const seq = cc.sequence(callFuncAction, delay, callFuncEnd)
-        this.node.runAction(seq)
-    },
+    // EndGameAction () {
+    //     const field = this.fieldNode
+    //     const callFuncAction = cc.callFunc(function () {
+    //         const action = cc.scaleTo (5, 0, 0)
+    //         field.runAction(action)
+    //     })
+    //     const callFuncEnd = cc.callFunc(function () {
+    //         cc.director.loadScene('EndGame')
+    //     })
+    //     const delay = cc.delayTime(this.endTime)
+    //     const seq = cc.sequence(callFuncAction, delay, callFuncEnd)
+    //     this.node.runAction(seq)
+    // },
 
     NewSize () {
         cc.director.loadScene('StartGame')
