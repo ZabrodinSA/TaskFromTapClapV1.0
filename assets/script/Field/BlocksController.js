@@ -2,30 +2,18 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        K: {
-            type: cc.Integer,
-            default: 2
-        },
+
         // _blocksMove: {
         //     type: Boolean,
         //     default: true
         // },
-        _mouseOn: {
-            type: Boolean,
-            default: false
-        },
-        mixingTime: {
-            type: cc.Float,
-            default: 1.5
-        },
+
+
         fieldNode: {
             type: cc.Node,
             default:  undefined
         }, 
-        numberOfPossibleMovesTextNode: {
-            type: cc.Node,
-            default:  undefined
-        },   
+  
     },
 
     // LIFE-CYCLE CALLBACKS:

@@ -189,7 +189,7 @@
       "array": [
         71.571,
         36.862,
-        342.9460598986377,
+        492.7684547533456,
         0,
         0,
         0,
@@ -432,6 +432,7 @@
     "fieldNode": {
       "__id__": 36
     },
+    "K": 2,
     "endTime": 3,
     "_id": "869KGD5i5CxZrIEVXUyC/d"
   },
@@ -1888,7 +1889,8 @@
     "_enabled": true,
     "_numberOfCollums": 10,
     "_numberOfLines": 10,
-    "sizeScale": 0.1,
+    "_mouseOn": false,
+    "mixingTime": 1.5,
     "numberOfPossibleMovesTextNode": {
       "__id__": 21
     },
@@ -1901,17 +1903,15 @@
     "_id": "85VOpfD9pGhox+N6/f3xP8"
   },
   {
-    "__type__": "a0eaedUr0dD2ox6aXMsp5cF",
+    "__type__": "265f2bLleVPtYqJIHZN2upb",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 36
     },
     "_enabled": true,
-    "K": 2,
-    "_mouseOn": false,
-    "mixingTime": 1.5,
-    "_id": "16j/ojczVLDYE1D5H4vEVd"
+    "sizeScale": 0.1,
+    "_id": "b9Qjou8KFJIad+c78tqziU"
   },
   {
     "__type__": "cc.PrefabInfo",

@@ -34,6 +34,10 @@ cc.Class({
             type: cc.Node,
             default:  undefined
         },
+        K: {
+            type: cc.Integer,
+            default: 2
+        },
         endTime: {
             type: cc.Float,
             default: 3
@@ -116,7 +120,11 @@ cc.Class({
             this.EndGame ()
         }
     },
-    
+
+    ClickHandler () {
+        cc.log('handlerGame')
+    },
+
     EndGame () {
         if (Global.currentScore >= Global.winScore) {
             Global.status = 'Вы выйграли!'

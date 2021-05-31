@@ -76,9 +76,9 @@ cc.Class({
     // updete (dt) {},
     
     EnterToBlock () {
-        const blocksController = this.node.parent.getComponent('BlocksController')
+        const fieldControl = this.node.parent.getComponent('FieldControl')
 
-        if (blocksController._mouseOn) {
+        if (fieldControl._mouseOn) {
             this._blockOmitted = true
             Global.blocks[this._column][this._line].omitted = true
             this.node.setScale(cc.v2(this._scaleOmittedX, this._scaleOmittedY))
@@ -102,9 +102,9 @@ cc.Class({
     },
 
     LeaveToBlock () {
-        const blocksController = this.node.parent.getComponent('BlocksController')
+        const fieldControl = this.node.parent.getComponent('FieldControl')
 
-        if (blocksController._mouseOn) {
+        if (fieldControl._mouseOn) {
             this._blockOmitted = false
             this.node.setScale(cc.v2(this._scaleNotOmittedX, this._scaleNotOmittedY))
 
@@ -120,10 +120,10 @@ cc.Class({
     },
 
     ClickHandler () {
-        const blocksController = this.node.parent.getComponent('BlocksController')
+        const fieldControl = this.node.parent.getComponent('FieldControl')
 
-        if (blocksController._mouseOn) {
-            blocksController.ClickHandler ()
+        if (fieldControl._mouseOn) {
+            fieldControl.ClickHandler ()
         }
     },
 
