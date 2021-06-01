@@ -51,8 +51,8 @@ cc.Class({
      },
 
     start () {
-        Global.width = 7
-        Global.height = 7
+        Global.width = 5
+        Global.height = 5
         Global.blocks = new Array (Global.width)
         for (let i = 0; i < Global.blocks.length; i++) {
             Global.blocks[i] = new Array (0)
@@ -125,24 +125,21 @@ cc.Class({
         const fieldControl = this.fieldNode.getComponent('FieldControl')
         let omittedBlocks = []
         let notOmittedBlocks = []
+
         for (let i = 0; i < Global.blocks.length; i++) {
             for (let j = 0; j < Global.blocks[i].length; j++) {
                 const blockController = Global.blocks[i][j].getComponent('BlockController')
                 if (blockController._blockOmitted) {
-                    // omittedBlocks.push({column: i, line: j})
                     omittedBlocks.push(Global.blocks[i][j])
                 } else {
-                    // notOmittedBlocks.push({column: i, line: j})
                     notOmittedBlocks.push(Global.blocks[i][j])
                 }
             }
         }
 
-
         if (omittedBlocks.length >= this.K) {                
             // this.AddScore (allOmittedBlocks.length)
             this.DeleteBlocksFromGlobal (omittedBlocks)
-
             fieldControl.DestroyBlocks (omittedBlocks, notOmittedBlocks)
         }
     },
@@ -150,17 +147,51 @@ cc.Class({
     DeleteBlocksFromGlobal (omittedBlocks) {
         for (let i = 0; i < omittedBlocks.length; i++) {
             const blockController = omittedBlocks[i].getComponent('BlockController')
-            Global.blocks[blockController._column].splice(blockController._line, 1)
+            Global.blocks[blockController._column].splice(blockController._line, 1)  
+            
+            for (let j = 0; j < Global.blocks[blockController._column].length; j++) {
+                const block = Global.blocks[blockController._column][j]
+                const _blockController = block.getComponent('BlockController') 
+                block.zIndex = j               
+                _blockController._line = j 
+            }
+        }      
+    },
+
+    Mixing () {
+        const fieldControl = this.fieldNode.getComponent('FieldControl')
+
+        if (fieldControl._mouseOn) {
+            fieldControl.MouseOff ()
+            let temp = []
             for (let i = 0; i < Global.blocks.length; i++) {
                 for (let j = 0; j < Global.blocks[i].length; j++) {
-                    const block = Global.blocks[i][j]
-                    const blockController = block.getComponent('BlockController') 
-                    block.zIndex = j               
-                    blockController._line = j                                        
+                    temp.push(Global.blocks[i][j])
                 }
             }
-        }        
+            cc.log(temp)
+            temp = shuffle(temp)
+            
+            // for (let i = 0; i < Global.blocks.length; i++) {
+            //     for (let j = 0; j < Global.blocks[i].length; j++) {
+            //         Global.blocks[i][j] = temp[i * j]
+            //     }
+            // }
+        }
+
+        function shuffle(arr){
+            let j, temp;
+            for(let i = arr.length - 1; i > 0; i--){
+                j = Math.floor(Math.random()*(i + 1));
+                temp = arr[j];
+                arr[j] = arr[i];
+                arr[i] = temp;
+            }
+            return arr;
+        }
     },
+
+    
 
     EndGame () {
         if (Global.currentScore >= Global.winScore) {

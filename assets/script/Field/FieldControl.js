@@ -86,6 +86,7 @@ cc.Class({
             actions.push(callFuncMove)
         }
         actions.push(delayMove)
+
         const callFuncChek = cc.callFunc(function () {
             fieldControl.CheckingTheNumberOfBlocks ()
         })
@@ -100,29 +101,36 @@ cc.Class({
         fieldControl.MouseOff ()
         const blockRenderer = this.block.data.getComponent('BlockRenderer')
         let actions = []
-        const delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
-        const delayMove = cc.delayTime (blockRenderer.blockMovementTime)   
-        for (let j = 0; j < Global.height; j++) {
+        let delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
+        let delayMove = cc.delayTime (blockRenderer.blockMovementTime)  
+
+        for (let j = 0 ; j < Global.height; j++) {
+            let noBlock = false
             for (let i = 0; i < Global.width; i++) {                
-                const callFuncCreate = cc.callFunc (function () {
-                    fieldControl.CreatingBlock(i, j)
-                })
                 if (Global.blocks[i][j] == undefined) {
+                    noBlock = true
+                    const callFuncCreate = cc.callFunc (function () {
+    
+                        fieldControl.CreatingBlock(i, j)
+                    })
                     actions.push(callFuncCreate)   
                 }             
             }
 
+            if (noBlock) {
+                actions.push(delaySpaw)
+                actions.push(delayMove)              
+            }
+
             if (j == Global.height - 1) {
+                actions.pop()
                 const callFuncMouseOn = cc.callFunc (function () {
                     fieldControl.MouseOn ()
                 })
-                actions.push(delaySpaw)
                 actions.push(callFuncMouseOn)
-            } else {
-                actions.push(delaySpaw)
-            }
-            actions.push(delayMove)                
+            } 
         }
+
         const seq = cc.sequence (actions)
         this.node.runAction (seq)
     },
@@ -130,6 +138,7 @@ cc.Class({
     CreatingBlock (column, line, isSuper = false) {
         const block = cc.instantiate(this.block)
         this.node.addChild(block, line, 'Block')
+
         const blockController = block.getComponent('BlockController')
         const blockRenderer = block.getComponent('BlockRenderer')
         const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size

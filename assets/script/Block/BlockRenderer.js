@@ -8,15 +8,15 @@ cc.Class({
         },
         blockSpawnTime: {
             type: cc.Float,
-            default: 1
+            default: 0.5
         },
         blockMovementTime: {
             type: cc.Float,
-            default: 0.3
+            default: 0.5
         },
         destructionTime: {
             type: cc.Float,
-            default: 0.7
+            default: 0.5
         },
     },
 
