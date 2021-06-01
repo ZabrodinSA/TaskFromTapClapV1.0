@@ -38,6 +38,10 @@ cc.Class({
             type: cc.Integer,
             default: 2
         },
+        L: {
+            type: cc.Integer,
+            default: 3
+        },
         endTime: {
             type: cc.Float,
             default: 3
@@ -121,22 +125,35 @@ cc.Class({
         }
     },
 
-    ClickHandler () {
+    ClickHandler (column, line) {
         const fieldControl = this.fieldNode.getComponent('FieldControl')
         let omittedBlocks = []
         let notOmittedBlocks = []
+        let indexClickBlock
 
         for (let i = 0; i < Global.blocks.length; i++) {
             for (let j = 0; j < Global.blocks[i].length; j++) {
                 const blockController = Global.blocks[i][j].getComponent('BlockController')
                 if (blockController._blockOmitted) {
+                    if (i == column && j == line) {
+                        indexClickBlock = omittedBlocks.length
+                    }
                     omittedBlocks.push(Global.blocks[i][j])
                 } else {
                     notOmittedBlocks.push(Global.blocks[i][j])
                 }
             }
         }
-
+        
+        if (omittedBlocks.length >= this.L) {
+            const block = omittedBlocks[indexClickBlock]
+            const blockController = block.getComponent('BlockController')
+            omittedBlocks.splice(indexClickBlock, 1)
+            notOmittedBlocks.push(block)
+            blockController.MakeSuperBlock ()
+            // fieldControl.CreatingSuperBlock (column, line)
+        }
+        cc.log(`${omittedBlocks.length} ${notOmittedBlocks.length}`)
         if (omittedBlocks.length >= this.K) {                
             // this.AddScore (allOmittedBlocks.length)
             this.DeleteBlocksFromGlobal (omittedBlocks)

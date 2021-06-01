@@ -41,9 +41,9 @@ cc.Class({
 
     // update (dt) {},
     
-    ClickHandler () {
+    ClickHandler (column, line) {
         const gameController = this.gameControllerNode.getComponent('GameController')
-        gameController.ClickHandler()
+        gameController.ClickHandler(column, line)
     },
 
     DestroyBlocks (omittedBlocks, notOmittedBlocks) {
@@ -141,7 +141,7 @@ cc.Class({
         }
     },
 
-    CreatingBlock (column, line, isSuper = false) {
+    CreatingBlock (column, line) {
         const block = cc.instantiate(this.block)
         this.node.addChild(block, line, 'Block')
 
@@ -154,7 +154,7 @@ cc.Class({
         block.setPosition(_x, _y)
         blockController._column = column
         blockController._line = line
-        blockController._superBlock = isSuper
+        blockController._superBlock = false
         Global.blocks[column][line] = block
 
         const callFuncMove = cc.callFunc( function () {              
@@ -164,6 +164,31 @@ cc.Class({
         const seq = cc.sequence(delaySpaw, callFuncMove)
         this.node.runAction(seq)
     },
+
+    // CreatingSuperBlock (column, line) {
+    //     const block = cc.instantiate(this.block)
+    //     this.node.addChild(block, line, 'Block')
+
+    //     const blockController = block.getComponent('BlockController')
+    //     const blockRenderer = block.getComponent('BlockRenderer')
+    //     const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size
+    //     const _x = (column + 0.5) * block.width / this.node.scaleX - this.node.width / 2    //координата х для создания блока в нужном стобце
+    //     const _y = (line - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height / 2    //координата y для создания блока в нужной строке
+        
+    //     block.setPosition(_x, _y)
+    //     blockController._blockOmitted = false
+    //     blockController._column = column
+    //     blockController._line = line
+    //     blockController._superBlock = false
+    //     Global.blocks[column][line] = block
+
+    //     const callFuncMove = cc.callFunc( function () {              
+    //         blockRenderer.MoveBlock()
+    //     })
+    //     const delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
+    //     const seq = cc.sequence(delaySpaw, callFuncMove)
+    //     this.node.runAction(seq)
+    // },
 
     MouseOn () {
         this._mouseOn = true

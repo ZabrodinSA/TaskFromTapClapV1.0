@@ -123,8 +123,15 @@ cc.Class({
         const fieldControl = this.node.parent.getComponent('FieldControl')
 
         if (fieldControl._mouseOn) {
-            fieldControl.ClickHandler ()
+            fieldControl.ClickHandler (this._column, this._line)
         }
+    },
+
+    MakeSuperBlock () {
+        this._superBlock = true
+        cc.log(Global.blocks)
+        const blockRenderer = this.node.getComponent('BlockRenderer')
+        blockRenderer.SetSuperBlock ()
     },
 
     RaysFromTheBlock (block, direction) {

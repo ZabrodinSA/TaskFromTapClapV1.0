@@ -6,6 +6,10 @@ cc.Class({
             type: cc.SpriteAtlas,
             default: null
         },
+        spriteSuperBlock: {
+            type: cc.SpriteFrame,
+            default: null
+        },
         blockSpawnTime: {
             type: cc.Float,
             default: 0.5
@@ -67,5 +71,10 @@ cc.Class({
         })
         const seq = cc.sequence (action, callFuncDestroy)
         blockNode.runAction(seq)
+    },
+
+    SetSuperBlock () {
+        const sprite = this.node.getComponent(cc.Sprite)
+        sprite.spriteFrame = this.spriteSuperBlock
     }
 });

@@ -195,6 +195,9 @@
     "blocksAtlas": {
       "__uuid__": "57d8b92f-fc09-4869-b434-46eeeddd0a00"
     },
+    "spriteSuperBlock": {
+      "__uuid__": "fd34a259-9ece-41f3-81fc-397905cd1f70"
+    },
     "blockSpawnTime": 0.5,
     "blockMovementTime": 0.3,
     "destructionTime": 0.5,
