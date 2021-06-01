@@ -90,10 +90,10 @@ cc.Class({
             for (let i = 0; i < adjacentBlocks.length; i++) {
                 if (adjacentBlocks[i].length != 0 ) {
                     const resultBlock = adjacentBlocks[i][0].collider.node
-                    const spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
+                    // const spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
                     const resultBlockController = resultBlock.getComponent('BlockController')
 
-                    if (!resultBlockController._blockOmitted && this._color == spriteFrame.name) {
+                    if (!resultBlockController._blockOmitted && this._color == resultBlockController._color) {
                         resultBlockController.EnterToBlock()
                     }
                 }
@@ -123,7 +123,7 @@ cc.Class({
         const fieldControl = this.node.parent.getComponent('FieldControl')
 
         if (fieldControl._mouseOn) {
-            fieldControl.ClickHandler (this._column, this._line)
+            fieldControl.ClickHandler (this._column, this._line, this._superBlock)
         }
     },
 
@@ -131,7 +131,9 @@ cc.Class({
         this._superBlock = true
         cc.log(Global.blocks)
         const blockRenderer = this.node.getComponent('BlockRenderer')
+        const spriteFrame = blockRenderer.spriteSuperBlock
         blockRenderer.SetSuperBlock ()
+        this._color = spriteFrame.name
     },
 
     RaysFromTheBlock (block, direction) {

@@ -41,9 +41,9 @@ cc.Class({
 
     // update (dt) {},
     
-    ClickHandler (column, line) {
+    ClickHandler (column, line, isSuperBlock) {
         const gameController = this.gameControllerNode.getComponent('GameController')
-        gameController.ClickHandler(column, line)
+        gameController.ClickHandler(column, line, isSuperBlock)
     },
 
     DestroyBlocks (omittedBlocks, notOmittedBlocks) {

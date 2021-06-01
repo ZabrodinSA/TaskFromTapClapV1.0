@@ -75,6 +75,8 @@ cc.Class({
 
     SetSuperBlock () {
         const sprite = this.node.getComponent(cc.Sprite)
-        sprite.spriteFrame = this.spriteSuperBlock
+        sprite.spriteFrame = this.spriteSuperBlock 
+        
+        
     }
 });
