@@ -125,6 +125,7 @@ cc.Class({
             if (j == Global.height - 1) {
                 actions.pop()
                 const callFuncMouseOn = cc.callFunc (function () {
+                    fieldControl.CheckingNumberOfMoves ()
                     fieldControl.MouseOn ()
                 })
                 actions.push(callFuncMouseOn)
@@ -139,6 +140,51 @@ cc.Class({
             const seq = cc.sequence (actions)
             this.node.runAction (seq)
         }
+    },
+
+    CheckingNumberOfMoves () {
+        const gameController = this.gameControllerNode.getComponent('GameController')
+        let _numberOfMoves = 0
+
+        for (let i = 0; i < Global.blocks.length; i++) {
+            for (let j = 0; j < Global.blocks[i].length; j++) {
+                const _blockController = Global.blocks[i][j].getComponent('BlockController')
+                if (!_blockController.blockOmitted) {
+                    const countBefore = this.CountOmittedBlocks ()
+                    _blockController.EnterToBlock (true)
+                    const countAfter = this.CountOmittedBlocks ()
+                    if (countAfter - countBefore >= gameController.K) {
+                        _numberOfMoves ++
+                    } 
+                }  
+            }
+        }
+
+        const blocksController = Global.blocks[0][0].getComponent('BlockController')
+        blocksController.LeaveToBlock (true)   
+
+        // if (gameController._numberOfStirring == 0 && _numberOfMoves == 0) {
+        //     gameController.EndGame () 
+        // }
+
+        return _numberOfMoves     
+    },
+
+    CountOmittedBlocks () {
+        let count = 0
+
+        for (let i = 0; i < Global.blocks.length; i++) {
+            for (let j = 0; j < Global.blocks[i].length; j++) {
+                const blocksController = Global.blocks[i][j].getComponent('BlockController')
+
+                if (blocksController._blockOmitted) {
+
+                    count ++ 
+                }
+            }
+        }
+        
+        return count           
     },
 
     CreatingBlock (column, line) {
@@ -164,31 +210,6 @@ cc.Class({
         const seq = cc.sequence(delaySpaw, callFuncMove)
         this.node.runAction(seq)
     },
-
-    // CreatingSuperBlock (column, line) {
-    //     const block = cc.instantiate(this.block)
-    //     this.node.addChild(block, line, 'Block')
-
-    //     const blockController = block.getComponent('BlockController')
-    //     const blockRenderer = block.getComponent('BlockRenderer')
-    //     const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size
-    //     const _x = (column + 0.5) * block.width / this.node.scaleX - this.node.width / 2    //координата х для создания блока в нужном стобце
-    //     const _y = (line - 0.5)*sizeCollliderBlock.height / this.node.scaleY - this.node.height / 2    //координата y для создания блока в нужной строке
-        
-    //     block.setPosition(_x, _y)
-    //     blockController._blockOmitted = false
-    //     blockController._column = column
-    //     blockController._line = line
-    //     blockController._superBlock = false
-    //     Global.blocks[column][line] = block
-
-    //     const callFuncMove = cc.callFunc( function () {              
-    //         blockRenderer.MoveBlock()
-    //     })
-    //     const delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
-    //     const seq = cc.sequence(delaySpaw, callFuncMove)
-    //     this.node.runAction(seq)
-    // },
 
     MouseOn () {
         this._mouseOn = true

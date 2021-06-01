@@ -40,7 +40,7 @@ cc.Class({
         },
         L: {
             type: cc.Integer,
-            default: 3
+            default: 5
         },
         endTime: {
             type: cc.Float,
@@ -55,8 +55,8 @@ cc.Class({
      },
 
     start () {
-        Global.width = 10
-        Global.height = 10
+        Global.width = 3
+        Global.height = 3
         Global.blocks = new Array (Global.width)
         for (let i = 0; i < Global.blocks.length; i++) {
             Global.blocks[i] = new Array (0)

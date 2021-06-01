@@ -75,10 +75,10 @@ cc.Class({
 
     // updete (dt) {},
     
-    EnterToBlock () {
+    EnterToBlock (toCheck = false) {
         const fieldControl = this.node.parent.getComponent('FieldControl')
 
-        if (fieldControl._mouseOn) {
+        if (fieldControl._mouseOn || toCheck) {
             this._blockOmitted = true
             Global.blocks[this._column][this._line].omitted = true
             this.node.setScale(cc.v2(this._scaleOmittedX, this._scaleOmittedY))
@@ -94,17 +94,17 @@ cc.Class({
                     const resultBlockController = resultBlock.getComponent('BlockController')
 
                     if (!resultBlockController._blockOmitted && this._color == resultBlockController._color) {
-                        resultBlockController.EnterToBlock()
+                        resultBlockController.EnterToBlock(toCheck)
                     }
                 }
             }
         }
     },
 
-    LeaveToBlock () {
+    LeaveToBlock (toCheck = false) {
         const fieldControl = this.node.parent.getComponent('FieldControl')
 
-        if (fieldControl._mouseOn) {
+        if (fieldControl._mouseOn || toCheck) {
             this._blockOmitted = false
             this.node.setScale(cc.v2(this._scaleNotOmittedX, this._scaleNotOmittedY))
 
@@ -112,7 +112,7 @@ cc.Class({
                 for (let j = 0; j < Global.blocks[i].length; j++) {
                     const blockController = Global.blocks[i][j].getComponent('BlockController')
                     if (blockController._blockOmitted) {
-                        blockController.LeaveToBlock()
+                        blockController.LeaveToBlock(toCheck)
                     }
                 }
             }
@@ -129,7 +129,6 @@ cc.Class({
 
     MakeSuperBlock () {
         this._superBlock = true
-        cc.log(Global.blocks)
         const blockRenderer = this.node.getComponent('BlockRenderer')
         const spriteFrame = blockRenderer.spriteSuperBlock
         blockRenderer.SetSuperBlock ()
