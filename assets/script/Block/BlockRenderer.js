@@ -74,9 +74,9 @@ cc.Class({
     },
 
     SetSuperBlock () {
+        const blockController = this.node.getComponent('BlockController')
         const sprite = this.node.getComponent(cc.Sprite)
         sprite.spriteFrame = this.spriteSuperBlock 
-        
-        
+        this.node.setScale(blockController._scaleNotOmittedX, blockController._scaleNotOmittedY)        
     }
 });

@@ -12,10 +12,7 @@ cc.Class({
 
     // onLoad () {},
 
-    onLoad () {
-        // this._numberOfCollums = Global.width
-        // this._numberOfLines = Global.height
-    },
+    // onLoad () {},
 
     start () {
         this.SetSizeField ()

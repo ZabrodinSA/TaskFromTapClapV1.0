@@ -2,18 +2,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        _winScore: {
-            type: cc.Integer,
-            default: 0
-        },
-        _currentScore: {
-            type: cc.Integer,
-            default:  0
-        },
-        _numberOfMoves: {
-            type: cc.Integer,
-            default:  0
-        },
         numberOfMovesRemainingTextNode: {
             type: cc.Node,
             default:  undefined
@@ -40,7 +28,7 @@ cc.Class({
         },
         L: {
             type: cc.Integer,
-            default: 5
+            default: 3
         },
         endTime: {
             type: cc.Float,
@@ -55,8 +43,6 @@ cc.Class({
      },
 
     start () {
-        Global.width = 3
-        Global.height = 3
         Global.blocks = new Array (Global.width)
         for (let i = 0; i < Global.blocks.length; i++) {
             Global.blocks[i] = new Array (0)
@@ -79,6 +65,8 @@ cc.Class({
 
     SetNumberOfMoves (numberOfMoves) {
         Global.numberOfMoves = numberOfMoves
+        const numberOfMovesRemainingText = this.numberOfMovesRemainingTextNode.getComponent(cc.Label)
+        numberOfMovesRemainingText.string = 'Осталось\n' + Global.numberOfMoves
     },
 
     ReduceTheNumberOfMoves () {
@@ -86,6 +74,7 @@ cc.Class({
         if (Global.numberOfMoves == 0) {
             this.EndGame () 
         } 
+        this.SetNumberOfMoves (Global.numberOfMoves)
     },
 
     InitialNumberOfStirring () {
@@ -98,6 +87,8 @@ cc.Class({
 
     SetNumberOfStirring (numberOfStirring) {
         Global.numberOfStirring = numberOfStirring
+        const numberOfStirringText = this.numberOfStirringTextNode.getComponent(cc.Label)
+        numberOfStirringText.string = 'ПЕРЕМЕШИВАНИЙ\n' + Global.numberOfStirring
     },
 
     ReduceTheNumberOfStirring () {
@@ -105,50 +96,56 @@ cc.Class({
         if (Global.numberOfStirring < 0) {
             Global.numberOfStirring = 0
         } 
+        this.SetNumberOfStirring (Global.numberOfStirring)
     },
 
     InitialWinScore () {
         return Global.width * Global.height
     },
-
     
     SetWinScore (winScore) {
+        Global.currentScore = 0
         Global.winScore = winScore
+        const currentScoreText = this.currentScoreTextNode.getComponent(cc.Label)
+        currentScoreText.string = Global.currentScore + ' / ' + Global.winScore
     },
 
     AddScore (addScore) {
         Global.currentScore += addScore
-        if (Global.currentScore < this._winScore) {
-
+        this.ReduceTheNumberOfMoves ()
+        const currentScoreText = this.currentScoreTextNode.getComponent(cc.Label)
+        currentScoreText.string = Global.currentScore + ' / ' + Global.winScore
+        const progressBar = this.scoreNode.getComponent(cc.ProgressBar)
+        if (Global.currentScore < Global.winScore) {
+            progressBar.progress = Global.currentScore / Global.winScore
         } else {
+            progressBar.progress = 1
             this.EndGame ()
         }
     },
 
     ClickHandler (column, line, isSuperBlock) {
         const fieldControl = this.fieldNode.getComponent('FieldControl')
-
-        if (isSuperBlock) {
-            this.SuperBlockEffect (column, line)
-        } else {
-            let omittedBlocks = []
-            let notOmittedBlocks = []
-            let indexClickBlock
-
-            for (let i = 0; i < Global.blocks.length; i++) {
-                for (let j = 0; j < Global.blocks[i].length; j++) {
-                    const blockController = Global.blocks[i][j].getComponent('BlockController')
-                    if (blockController._blockOmitted) {
-                        if (i == column && j == line) {
-                            indexClickBlock = omittedBlocks.length
-                        }
-                        omittedBlocks.push(Global.blocks[i][j])
-                    } else {
-                        notOmittedBlocks.push(Global.blocks[i][j])
+        let omittedBlocks = []
+        let notOmittedBlocks = []
+        let indexClickBlock
+        for (let i = 0; i < Global.blocks.length; i++) {
+            for (let j = 0; j < Global.blocks[i].length; j++) {
+                const blockController = Global.blocks[i][j].getComponent('BlockController')
+                if (blockController._blockOmitted) {
+                    if (i == column && j == line) {
+                        indexClickBlock = omittedBlocks.length
                     }
+                    omittedBlocks.push(Global.blocks[i][j])
+                } else {
+                    notOmittedBlocks.push(Global.blocks[i][j])
                 }
             }
+        }
 
+        if (isSuperBlock) {
+            this.SuperBlockEffect (omittedBlocks, )
+        } else {
             if (omittedBlocks.length >= this.L) {
                 const block = omittedBlocks[indexClickBlock]
                 const blockController = block.getComponent('BlockController')
@@ -164,7 +161,7 @@ cc.Class({
     },
 
     DeleteBlocksFromGlobal (blocks) {
-        // this.AddScore (blocks.length)
+        this.AddScore (blocks.length)
 
         for (let i = 0; i < blocks.length; i++) {
             const blockController = blocks[i].getComponent('BlockController')
@@ -179,12 +176,15 @@ cc.Class({
         }      
     },
 
-    SuperBlockEffect (column, line) {
+    SuperBlockEffect (omittedBlocks) {
         const fieldControl = this.fieldNode.getComponent('FieldControl')
         let destroyBlocks = []
 
-        for (let i = 0; i < Global.height; i++) {
-            destroyBlocks.push(Global.blocks[column][i])
+        for (let i = 0; i < omittedBlocks.length; i++){ 
+            const blockController = omittedBlocks[i].getComponent('BlockController')           
+            for (let j = 0; j < Global.height; j++) {
+                destroyBlocks.push(Global.blocks[blockController._column][j])
+            }
         }
 
         this.DeleteBlocksFromGlobal (destroyBlocks)
@@ -200,8 +200,9 @@ cc.Class({
     Mixing () {
         const fieldControl = this.fieldNode.getComponent('FieldControl')
 
-        if (fieldControl._mouseOn) {
+        if (fieldControl._mouseOn && Global.numberOfStirring != 0) {
             fieldControl.MouseOff ()
+            this.ReduceTheNumberOfStirring ()
             fieldControl._mixingTime = 0
             let temp = []
             for (let i = 0; i < Global.blocks.length; i++) {
@@ -246,22 +247,22 @@ cc.Class({
         } else {
             Global.status = 'Вы проиграли'
         }
-        this.fieldNode.getComponent('FieldDestroyer').DestroyField()
+        this.EndGameAction ()
     },
 
-    // EndGameAction () {
-    //     const field = this.fieldNode
-    //     const callFuncAction = cc.callFunc(function () {
-    //         const action = cc.scaleTo (5, 0, 0)
-    //         field.runAction(action)
-    //     })
-    //     const callFuncEnd = cc.callFunc(function () {
-    //         cc.director.loadScene('EndGame')
-    //     })
-    //     const delay = cc.delayTime(this.endTime)
-    //     const seq = cc.sequence(callFuncAction, delay, callFuncEnd)
-    //     this.node.runAction(seq)
-    // },
+    EndGameAction () {
+        const field = this.fieldNode
+        const callFuncAction = cc.callFunc(function () {
+            const action = cc.scaleTo (5, 0, 0)
+            field.runAction(action)
+        })
+        const callFuncEnd = cc.callFunc(function () {
+            cc.director.loadScene('EndGame')
+        })
+        const delay = cc.delayTime(this.endTime)
+        const seq = cc.sequence(callFuncAction, delay, callFuncEnd)
+        this.node.runAction(seq)
+    },
 
     NewSize () {
         cc.director.loadScene('StartGame')

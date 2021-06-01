@@ -35,7 +35,10 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this._numberOfCollums = Global.width
+        this._numberOfLines = Global.height
+    },
 
     // start () {},
 
@@ -145,7 +148,7 @@ cc.Class({
     CheckingNumberOfMoves () {
         const gameController = this.gameControllerNode.getComponent('GameController')
         let _numberOfMoves = 0
-
+        let _numberOfSuperBlocks = 0
         for (let i = 0; i < Global.blocks.length; i++) {
             for (let j = 0; j < Global.blocks[i].length; j++) {
                 const _blockController = Global.blocks[i][j].getComponent('BlockController')
@@ -156,18 +159,23 @@ cc.Class({
                     if (countAfter - countBefore >= gameController.K) {
                         _numberOfMoves ++
                     } 
-                }  
+                } 
+                if (_blockController._superBlock) {
+                    _numberOfSuperBlocks++
+                } 
             }
         }
 
         const blocksController = Global.blocks[0][0].getComponent('BlockController')
-        blocksController.LeaveToBlock (true)   
+        blocksController.LeaveToBlock (true) 
+        _numberOfMoves += _numberOfSuperBlocks
 
-        // if (gameController._numberOfStirring == 0 && _numberOfMoves == 0) {
-        //     gameController.EndGame () 
-        // }
+        if (gameController._numberOfStirring == 0 && _numberOfMoves == 0) {
+            gameController.EndGame () 
+        }
 
-        return _numberOfMoves     
+        const numberOfPossibleMovesText = this.numberOfPossibleMovesTextNode.getComponent(cc.Label)
+        numberOfPossibleMovesText.string = 'Доступно\n' + _numberOfMoves
     },
 
     CountOmittedBlocks () {

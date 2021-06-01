@@ -414,9 +414,6 @@
       "__id__": 7
     },
     "_enabled": true,
-    "_winScore": 0,
-    "_currentScore": 0,
-    "_numberOfMoves": 0,
     "numberOfMovesRemainingTextNode": {
       "__id__": 9
     },
@@ -1505,7 +1502,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 280,
+      "width": 0,
       "height": 30
     },
     "_anchorPoint": {
@@ -1713,7 +1710,7 @@
       "__id__": 31
     },
     "_N$mode": 0,
-    "_N$progress": 1,
+    "_N$progress": 0,
     "_N$reverse": false,
     "_id": "43RQyAJEdF4Ky1eXVW0XUi"
   },

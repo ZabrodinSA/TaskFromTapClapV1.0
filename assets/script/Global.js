@@ -3,7 +3,7 @@ window.Global = {
     width: null,
     height: null,
     status: null,
-    currentScore: null,
+    currentScore: 0,
     winScore: null,
     numberOfMovesRemaining: null,
     numberOfStirring: null,
