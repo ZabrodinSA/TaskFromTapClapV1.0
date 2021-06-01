@@ -13,10 +13,10 @@ cc.Class({
         _mouseOn: {
             type: Boolean,
             default: false
-        },
-        mixingTime: {
+        },        
+        _mixingTime: {
             type: cc.Float,
-            default: 1.5
+            default: 0
         },
         numberOfPossibleMovesTextNode: {
             type: cc.Node,
@@ -98,7 +98,7 @@ cc.Class({
 
     CheckingTheNumberOfBlocks () {
         const fieldControl = this
-        fieldControl.MouseOff ()
+        fieldControl.MouseOff () 
         const blockRenderer = this.block.data.getComponent('BlockRenderer')
         let actions = []
         let delaySpaw = cc.delayTime (blockRenderer.blockSpawnTime)
@@ -106,7 +106,7 @@ cc.Class({
 
         for (let j = 0 ; j < Global.height; j++) {
             let noBlock = false
-            for (let i = 0; i < Global.width; i++) {                
+            for (let i = 0; i < Global.width; i++) {
                 if (Global.blocks[i][j] == undefined) {
                     noBlock = true
                     const callFuncCreate = cc.callFunc (function () {
@@ -131,8 +131,14 @@ cc.Class({
             } 
         }
 
-        const seq = cc.sequence (actions)
-        this.node.runAction (seq)
+        if (actions.length == 1) {
+            const delay = cc.delayTime (this._mixingTime) 
+            const seq = cc.sequence (delay, actions[0])
+            this.node.runAction (seq)
+        } else {
+            const seq = cc.sequence (actions)
+            this.node.runAction (seq)
+        }
     },
 
     CreatingBlock (column, line, isSuper = false) {
@@ -161,10 +167,13 @@ cc.Class({
 
     MouseOn () {
         this._mouseOn = true
+        cc.log('On')
     },
 
     MouseOff () {
         this._mouseOn = false
+        cc.log('Off')
+
     }
 
 });

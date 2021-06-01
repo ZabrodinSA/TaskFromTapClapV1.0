@@ -51,8 +51,8 @@ cc.Class({
      },
 
     start () {
-        Global.width = 5
-        Global.height = 5
+        Global.width = 10
+        Global.height = 10
         Global.blocks = new Array (Global.width)
         for (let i = 0; i < Global.blocks.length; i++) {
             Global.blocks[i] = new Array (0)
@@ -163,20 +163,28 @@ cc.Class({
 
         if (fieldControl._mouseOn) {
             fieldControl.MouseOff ()
+            fieldControl._mixingTime = 0
             let temp = []
             for (let i = 0; i < Global.blocks.length; i++) {
                 for (let j = 0; j < Global.blocks[i].length; j++) {
                     temp.push(Global.blocks[i][j])
                 }
             }
-            cc.log(temp)
+
             temp = shuffle(temp)
-            
-            // for (let i = 0; i < Global.blocks.length; i++) {
-            //     for (let j = 0; j < Global.blocks[i].length; j++) {
-            //         Global.blocks[i][j] = temp[i * j]
-            //     }
-            // }
+            let count = 0
+            for (let i = 0; i < Global.blocks.length; i++) {
+                for (let j = 0; j < Global.blocks[i].length; j++) {
+                    Global.blocks[i][j] = temp[count]
+                    const block = temp[count]
+                    const blockController = block.getComponent('BlockController')
+                    block.zIndex = j               
+                    blockController._line = j 
+                    blockController._column = i
+                    count ++
+                }
+            }
+            fieldControl.MoveBlocks(temp)
         }
 
         function shuffle(arr){

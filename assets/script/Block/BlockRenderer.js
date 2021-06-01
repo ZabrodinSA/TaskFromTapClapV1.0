@@ -12,7 +12,7 @@ cc.Class({
         },
         blockMovementTime: {
             type: cc.Float,
-            default: 0.5
+            default: 0.3
         },
         destructionTime: {
             type: cc.Float,
@@ -43,14 +43,20 @@ cc.Class({
     MoveBlock () {
         const block = this.node
         const field = block.parent
+        const fieldControl = field.getComponent ('FieldControl')
         const blockController = block.getComponent('BlockController')
         const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size
-
         const _x = (blockController._column + 0.5) * block.width / field.scaleX - field.width / 2   //координата х для позиции блока
         const _y = (blockController._line + 0.5) * sizeCollliderBlock.height / field.scaleY - field.height / 2   //координата y для позиции блока
-        const distanceInLines =  (block.y - _y)/(sizeCollliderBlock.height / field.scaleY)
+
+
+        const distanceInLines =  Math.abs((block.y - _y)/(sizeCollliderBlock.height / field.scaleY))
         const action = cc.moveTo(this.blockMovementTime * distanceInLines, _x, _y)
         block.runAction(action)
+
+        if (fieldControl._mixingTime < this.blockMovementTime * distanceInLines) {
+            fieldControl._mixingTime = this.blockMovementTime * distanceInLines
+        }
     },
 
     DestroyBlock () {
