@@ -1,6 +1,6 @@
-import {j} from './NewScript'
+const { Game } = require("../GameClass");
 
-export default cc.Class({
+cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -33,57 +33,44 @@ export default cc.Class({
             default: undefined
         },
         width: {
-            get () {
-                return this._width
-            },
-            set (value) {
-                if (value > this._minWidth){
-                    this._width = value > this._maxWidth ? this._maxWidth : Math.ceil (value)   
-                }
-                else {
-                    this._width = this._minWidth
-                } 
-            }, 
+            type: cc.Integer,
+            default: undefined
         },
         height: {
-            get () {
-                return this._height
-            },
-            set (value) {
-                if (value > this._minHeight){
-                    this._height = value > this._maxHeight ? this._maxHeight : Math.ceil (value)     
-                }
-                else {
-                    this._height = this._minHeight
-                } 
-            }, 
+            type: cc.Integer, 
+            default: undefined
         },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-    },
+    // onLoad () {},
 
-    start () {
-        // cc.log(j.prototype)
-
-    },
+    // start () {},
 
     // update (dt) {},
 
+    SetSize (size, max, min) {
+        let rusultSize
+        if (size > min){
+            rusultSize = size > max ? max : Math.ceil (size)     
+        }
+        else {
+            rusultSize = min
+        } 
+        return rusultSize
+    },
+
     SetWidth () {
-        this.width = this.widthNode.getComponent(cc.EditBox).string
-        Global.width = this.width
+        this.width = this.SetSize(this.widthNode.getComponent(cc.EditBox).string, this._maxWidth, this._minWidth)
+        Global.width = this.width//
         this.widthNode.getComponent(cc.EditBox).string = this.width
     },
 
     SetHeight () {
-        this.height = this.heightNode.getComponent(cc.EditBox).string
-        Global.height = this.height
+        this.height = this.SetSize(this.heightNode.getComponent(cc.EditBox).string, this._maxHeight, this._minHeight)
+        Global.height = this.height//
         this.heightNode.getComponent(cc.EditBox).string = this.height
-
-        this.height = 10
     },
 
     StartGame () {
@@ -92,6 +79,8 @@ export default cc.Class({
         } else if (this.height == undefined) {
             this.messageNode.getComponent(cc.Label).string = 'Введите высоту поля'
         } else {
+            game = new Game(this.width, this.height)
+            // cc.log(game)
             cc.director.loadScene('Game')
         }
     },

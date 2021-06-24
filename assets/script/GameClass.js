@@ -1,14 +1,8 @@
 import { Block, SuperBlock } from "./BlockClasses"
 import { Field  } from "./FieldClass"
 
-const numberOfColumns = 3
-const numberOfLines = 3
-const K = 2
-const L = 3
-
-
-class Game {
-    constructor (numberOfColumns, numberOfLines, K, L) {
+export class Game {
+    constructor (numberOfColumns, numberOfLines, K = 2, L = 3) {
         this.field = new Field (numberOfColumns, numberOfLines)
         this._winScore = this.InitialWinScore ()
         this.numberOfMixing = this.InitialNumberOfMixing ()
@@ -16,7 +10,7 @@ class Game {
         this.curScore = 0
         this._K = K
         this._L = L
-        // this.numberOfPossibleMoves = this.CheckingNumberOfMoves ()
+        this.numberOfPossibleMoves = this.CheckingNumberOfMoves ()
     }
     get K() {return this._K}
     get L() {return this._L}
@@ -63,10 +57,7 @@ class Game {
     }
 }
 
-export const game = new Game (numberOfColumns, numberOfLines, K, L)
-game.field.SelectTheBlock(0, 1)
-game.ClickHandler(0,1)
-cc.log(game.field.blocks)
+
 
 
 

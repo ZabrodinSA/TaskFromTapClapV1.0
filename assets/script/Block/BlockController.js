@@ -40,10 +40,10 @@ cc.Class({
             type: cc.Float,
             default: 0.9
         }, 
-        blocksController: {
-            type: cc.Node,
-            default:  undefined
-        },  
+        // blocksController: {
+        //     type: cc.Node,
+        //     default:  undefined
+        // },  
     },
 
     // LIFE-CYCLE CALLBACKS:

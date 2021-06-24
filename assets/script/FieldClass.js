@@ -28,16 +28,6 @@ export class Field {
             return this._numberOfColumns
         }
 
-    // SetSize (size, max, min) {
-    //     let rusultSize
-    //     if (size > min){
-    //         rusultSize = size > max ? max : Math.ceil (size)     
-    //     }
-    //     else {
-    //         rusultSize = min
-    //     } 
-    // }
-
     CreatingMissingBlocks () {
         this.FunctionForAllBlocks ((blocks, column, line) => {
             if (blocks[column][line] == undefined) {
@@ -86,13 +76,6 @@ export class Field {
         }
     }
 }
-// let field = new Field(3, 3)
-// // field.FunctionForAllBlocks(field.CreatingMissingBlocks)
-// field.CreatingMissingBlocks()
-// cc.log(field.blocks)
-// field.SelectTheBlock(1, 1)
-// cc.log(field.allocatedBlockCounter)
-// field.DoNotSelectABlock()
-// cc.log(field.allocatedBlockCounter)
+
 
 

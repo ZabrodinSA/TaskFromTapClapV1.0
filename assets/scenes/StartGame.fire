@@ -174,7 +174,7 @@
       "array": [
         82,
         42,
-        492.7684547533456,
+        517.01716605931,
         0,
         0,
         0,
@@ -1181,7 +1181,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "13f79XwpvhFnIwln+UFYL9Y",
+    "_componentId": "1bba5tlQLdDYZUB8ogRrSo+",
     "handler": "SetWidth",
     "customEventData": ""
   },
@@ -1666,7 +1666,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "13f79XwpvhFnIwln+UFYL9Y",
+    "_componentId": "1bba5tlQLdDYZUB8ogRrSo+",
     "handler": "SetHeight",
     "customEventData": ""
   },
@@ -2052,7 +2052,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "13f79XwpvhFnIwln+UFYL9Y",
+    "_componentId": "1bba5tlQLdDYZUB8ogRrSo+",
     "handler": "StartGame",
     "customEventData": ""
   },
@@ -2183,7 +2183,7 @@
     "_id": "e1A9PC7nVDupchKr89RHEY"
   },
   {
-    "__type__": "13f79XwpvhFnIwln+UFYL9Y",
+    "__type__": "1bba5tlQLdDYZUB8ogRrSo+",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -2203,7 +2203,7 @@
     "messageNode": {
       "__id__": 46
     },
-    "_id": "8dp1yxdkVEg5ATn6Kew04u"
+    "_id": "9cnCPZcUBJBJ5Hi7W7F0Li"
   },
   {
     "__type__": "cc.Canvas",
