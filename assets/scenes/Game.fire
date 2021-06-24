@@ -189,7 +189,7 @@
       "array": [
         71.571,
         36.862,
-        483.2421753117168,
+        492.7684547533456,
         0,
         0,
         0,
@@ -354,9 +354,6 @@
     "_components": [
       {
         "__id__": 8
-      },
-      {
-        "__id__": 40
       }
     ],
     "_prefab": {
@@ -417,10 +414,6 @@
       "__id__": 7
     },
     "_enabled": true,
-    "_winScore": 0,
-    "_currentScore": 0,
-    "_numberOfMoves": 0,
-    "_numberOfStirring": 1,
     "numberOfMovesRemainingTextNode": {
       "__id__": 9
     },
@@ -436,6 +429,8 @@
     "fieldNode": {
       "__id__": 36
     },
+    "K": 2,
+    "L": 3,
     "endTime": 3,
     "_id": "869KGD5i5CxZrIEVXUyC/d"
   },
@@ -1024,7 +1019,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "a0eaedUr0dD2ox6aXMsp5cF",
+    "_componentId": "b68158zrt9MP71wC9b3DXQY",
     "handler": "Mixing",
     "customEventData": ""
   },
@@ -1507,7 +1502,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 280,
+      "width": 0,
       "height": 30
     },
     "_anchorPoint": {
@@ -1715,7 +1710,7 @@
       "__id__": 31
     },
     "_N$mode": 0,
-    "_N$progress": 1,
+    "_N$progress": 0,
     "_N$reverse": false,
     "_id": "43RQyAJEdF4Ky1eXVW0XUi"
   },
@@ -1735,6 +1730,9 @@
     "_components": [
       {
         "__id__": 39
+      },
+      {
+        "__id__": 40
       }
     ],
     "_prefab": null,
@@ -1889,7 +1887,8 @@
     "_enabled": true,
     "_numberOfCollums": 10,
     "_numberOfLines": 10,
-    "sizeScale": 0.1,
+    "_mouseOn": false,
+    "_mixingTime": 0,
     "numberOfPossibleMovesTextNode": {
       "__id__": 21
     },
@@ -1902,23 +1901,15 @@
     "_id": "85VOpfD9pGhox+N6/f3xP8"
   },
   {
-    "__type__": "a0eaedUr0dD2ox6aXMsp5cF",
+    "__type__": "265f2bLleVPtYqJIHZN2upb",
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 7
-    },
-    "_enabled": true,
-    "K": 2,
-    "_blocksMove": false,
-    "mixingTime": 1.5,
-    "fieldNode": {
       "__id__": 36
     },
-    "numberOfPossibleMovesTextNode": {
-      "__id__": 21
-    },
-    "_id": "09ePnVQgdClZpKnGtoAoLC"
+    "_enabled": true,
+    "sizeScale": 0.1,
+    "_id": "b9Qjou8KFJIad+c78tqziU"
   },
   {
     "__type__": "cc.PrefabInfo",

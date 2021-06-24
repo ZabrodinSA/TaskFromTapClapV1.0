@@ -1,4 +1,6 @@
-cc.Class({
+import {j} from './NewScript'
+
+export default cc.Class({
     extends: cc.Component,
 
     properties: {
@@ -61,10 +63,10 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-
     },
 
     start () {
+        // cc.log(j.prototype)
 
     },
 
@@ -80,6 +82,8 @@ cc.Class({
         this.height = this.heightNode.getComponent(cc.EditBox).string
         Global.height = this.height
         this.heightNode.getComponent(cc.EditBox).string = this.height
+
+        this.height = 10
     },
 
     StartGame () {
@@ -90,5 +94,6 @@ cc.Class({
         } else {
             cc.director.loadScene('Game')
         }
-    }
+    },
+    
 });

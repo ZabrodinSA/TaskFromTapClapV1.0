@@ -1,6 +1,13 @@
-
 window.Global = {
-    width: null,
-    height: null,
-    status: null
+    width: 10,
+    height: 10,
+    status: null,
+    currentScore: 0,
+    winScore: null,
+    numberOfMovesRemaining: null,
+    numberOfStirring: null,
+    numberOfMoves: null,
+    blocks: [[]],
 }
+
+
