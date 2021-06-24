@@ -227,7 +227,6 @@ cc.Class({
     MouseOff () {
         this._mouseOn = false
         cc.log('Off')
-
     }
 
 });
