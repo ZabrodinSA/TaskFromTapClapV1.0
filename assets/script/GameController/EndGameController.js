@@ -11,7 +11,11 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.statusNode.getComponent(cc.Label).string = Global.status
+        if (game.statusGame == 'win') {
+            this.statusNode.getComponent(cc.Label).string = 'Вы выиграли'
+        } else {
+            this.statusNode.getComponent(cc.Label).string = 'Вы проиграли'
+        }
     },
 
     // start () {},
@@ -23,6 +27,9 @@ cc.Class({
     },
 
     StartOver () {
+        const columns = game.field.numberOfColumns
+        const lines = game.field.numberOfLines
+        game = new Game (columns, lines)
         cc.director.loadScene('Game')
     }
 });

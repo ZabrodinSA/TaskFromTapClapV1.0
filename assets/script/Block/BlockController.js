@@ -1,3 +1,5 @@
+const { Block } = require("../BlockClasses");
+
 cc.Class({
     extends: cc.Component,
 
@@ -5,10 +7,6 @@ cc.Class({
         _blockOmitted: {
             type: Boolean,
             default: false
-        },
-        _color: {
-            type: String, 
-            default: null           
         },
         _scaleOmittedX: {
             type: cc.Float,
@@ -32,14 +30,27 @@ cc.Class({
         _column: {
             type: cc.Integer,
         },
-        _superBlock: {
-            type: Boolean,
-            default: false
+        blockModel: {
+            type: Block,
+            default: null
+        },
+        blockSpawnTime: {
+            type: cc.Float,
+            default: 0.5
+        },
+        blockMovementTime: {
+            type: cc.Float,
+            default: 0.3
+        },
+        destructionTime: {
+            type: cc.Float,
+            default: 0.5
         },
         sizeScale: {
             type: cc.Float,
             default: 0.9
-        }, 
+        },
+
         // blocksController: {
         //     type: cc.Node,
         //     default:  undefined
@@ -49,16 +60,20 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.SetSpriteFrame()
         const field = this.node.parent
-        const blockCreator = this.node.getComponent('BlockRenderer')
 
         this._scaleOmittedX = 1 / field.scaleX * this.sizeScale
         this._scaleOmittedY = 1 / field.scaleY * this.sizeScale
         this._scaleNotOmittedX = 1 / field.scaleX 
         this._scaleNotOmittedY = 1 / field.scaleY 
 
-        blockCreator.CreateBlock()
-        this._color = this.node.getComponent(cc.Sprite).spriteFrame.name
+        this._column = this.blockModel.column
+        if (this.blockModel.name == 'super') {
+            this.RenderForSuper ()
+        } else {
+            this.RenderForColor ()
+        }
     },
 
     start () {   
@@ -74,89 +89,115 @@ cc.Class({
     },
 
     // updete (dt) {},
+
+    RenderForSuper () {
+        this._line = this.blockModel.line
+        this.SetPosition(this._column, this._line)
+        this.RenderingCreation ()
+    },
+
+    RenderForColor () {
+        this._line = game.field.numberOfLines - 1
+        this.SetPosition(this._column, this._line)
+        this.RenderingCreation ()
+    },
+
+    RenderingCreation () {
+        const self = this
+        const block = this.node
+        block.setScale(0, 0)
+        const action = cc.scaleTo(this.blockSpawnTime, this._scaleNotOmittedX, this._scaleNotOmittedY)
+        const callFuncMove = cc.callFunc( function () {              
+            self.MoveBlock()
+        })
+        const seq = cc.sequence(action, callFuncMove)
+        this.node.runAction(seq)
+    },
+
+    SetPosition (column, line) {
+        const block = this.node
+        const field = this.node.parent
+
+        const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size
+        const _x = (column + 0.5) * block.width / field.scaleX - field.width / 2    
+        const _y = (line + 0.5) * sizeCollliderBlock.height / field.scaleY - field.height / 2       
+        this.node.setPosition(_x, _y)
+    },
+
+    SetSpriteFrame () {
+        let self = this
+
+        cc.loader.loadRes('Blocks/' + this.blockModel.name, cc.SpriteFrame, function (err, sprite) {
+            self.node.getComponent(cc.Sprite).spriteFrame = sprite;
+        })           
+    },
+
+    MoveBlock () {
+        const self = this
+        const block = this.node
+        const field = block.parent
+        const fieldControl = field.getComponent ('FieldControl')
+        const sizeCollliderBlock = block.getComponent(cc.PhysicsBoxCollider).size
+
+        const _x = (this.blockModel.column + 0.5) * block.width / field.scaleX - field.width / 2   //координата х для позиции блока
+        const _y = (this.blockModel.line + 0.5) * sizeCollliderBlock.height / field.scaleY - field.height / 2   //координата y для позиции блока
+
+        const distanceInLines =  Math.abs((block.y - _y)/(sizeCollliderBlock.height / field.scaleY))
+        const moveTime = this.blockMovementTime * distanceInLines
+        const action = cc.moveTo(moveTime, _x, _y)
+        const callFunc = cc.callFunc (() => {
+            self._column = self.blockModel.column
+            self._line = self.blockModel.line
+            block.zIndex = self.blockModel.line
+        })
+
+        if (fieldControl._mixingTime < moveTime) {
+            fieldControl._mixingTime = moveTime
+        }
+        cc.log(fieldControl._mixingTime)
+        const seq = cc.sequence(action, callFunc)
+        block.runAction(seq)
+    },
     
-    EnterToBlock (toCheck = false) {
+    EnterToBlock () {
         const fieldControl = this.node.parent.getComponent('FieldControl')
-
-        if (fieldControl._mouseOn || toCheck) {
-            this._blockOmitted = true
-            Global.blocks[this._column][this._line].omitted = true
-            this.node.setScale(cc.v2(this._scaleOmittedX, this._scaleOmittedY))
-            const adjacentBlocks = [this.RaysFromTheBlock(this.node, 'Up'),
-                                this.RaysFromTheBlock(this.node, 'Down'),
-                                this.RaysFromTheBlock(this.node, 'Left'),
-                                this.RaysFromTheBlock(this.node, 'Right')]
-
-            for (let i = 0; i < adjacentBlocks.length; i++) {
-                if (adjacentBlocks[i].length != 0 ) {
-                    const resultBlock = adjacentBlocks[i][0].collider.node
-                    // const spriteFrame = resultBlock.getComponent(cc.Sprite).spriteFrame
-                    const resultBlockController = resultBlock.getComponent('BlockController')
-
-                    if (!resultBlockController._blockOmitted && this._color == resultBlockController._color) {
-                        resultBlockController.EnterToBlock(toCheck)
-                    }
-                }
-            }
+        if (fieldControl._mouseOn) {
+            game.field.SelectTheBlock(this._column, this._line)
+            fieldControl.RenderSelectedBlocks ()
         }
     },
 
-    LeaveToBlock (toCheck = false) {
+    LeaveToBlock () {       
         const fieldControl = this.node.parent.getComponent('FieldControl')
-
-        if (fieldControl._mouseOn || toCheck) {
-            this._blockOmitted = false
-            this.node.setScale(cc.v2(this._scaleNotOmittedX, this._scaleNotOmittedY))
-
-            for (let i = 0; i < Global.blocks.length; i++) {
-                for (let j = 0; j < Global.blocks[i].length; j++) {
-                    const blockController = Global.blocks[i][j].getComponent('BlockController')
-                    if (blockController._blockOmitted) {
-                        blockController.LeaveToBlock(toCheck)
-                    }
-                }
-            }
+        if (fieldControl._mouseOn) {
+            game.field.DoNotSelectAllBlocks()
+            fieldControl.RenderAnUnselectedBlocks ()
         }
+    },
+
+    RenderSelectedBlock () {
+        this.node.setScale(this._scaleOmittedX, this._scaleOmittedY)
+    },
+
+    RenderAnUnselectedBlock () {
+        this.node.setScale(this._scaleNotOmittedX, this._scaleNotOmittedY)
+    },
+
+    BlockDestructionRendering () {
+        const blockNode = this.node
+        const action = cc.scaleTo(this.destructionTime, 0, 0)
+        const callFuncDestroy = cc.callFunc(function () {
+            blockNode.destroy() 
+        })
+        const seq = cc.sequence (action, callFuncDestroy)
+        blockNode.runAction(seq)
     },
 
     ClickHandler () {
         const fieldControl = this.node.parent.getComponent('FieldControl')
 
         if (fieldControl._mouseOn) {
-            fieldControl.ClickHandler (this._column, this._line, this._superBlock)
+            fieldControl.ClickHandler (this._column, this._line)
         }
-    },
-
-    MakeSuperBlock () {
-        this._superBlock = true
-        const blockRenderer = this.node.getComponent('BlockRenderer')
-        const spriteFrame = blockRenderer.spriteSuperBlock
-        blockRenderer.SetSuperBlock ()
-        this._color = spriteFrame.name
-    },
-
-    RaysFromTheBlock (block, direction) {
-        const pStart = block.parent.convertToWorldSpaceAR(new cc.Vec2(
-            block.x, block.y), pStart)
-        let result
-        if (direction == 'Up') {
-            const pUp = block.parent.convertToWorldSpaceAR(new cc.Vec2(
-                block.x, block.y + block.height / block.parent.scaleY), pUp)
-            result = cc.director.getPhysicsManager().rayCast (pStart, pUp, cc.RayCastType.Closest)
-        } else if (direction == 'Down') {
-            const pDown = block.parent.convertToWorldSpaceAR(new cc.Vec2(
-                block.x, block.y - block.height / block.parent.scaleY), pDown)
-            result = cc.director.getPhysicsManager().rayCast (pStart, pDown, cc.RayCastType.Closest)    
-        } else if (direction == 'Right') {
-            const pRight = block.parent.convertToWorldSpaceAR(new cc.Vec2(
-                block.x + block.width / block.parent.scaleX, block.y), pRight)
-            result = cc.director.getPhysicsManager().rayCast (pStart, pRight, cc.RayCastType.Closest)
-        } else if (direction == 'Left') {
-            const pLeft = block.parent.convertToWorldSpaceAR(new cc.Vec2(
-                block.x - block.width / block.parent.scaleX, block.y), pLeft)
-            result = cc.director.getPhysicsManager().rayCast (pStart, pLeft, cc.RayCastType.Closest)
-        }
-
-        return result
     },
 });

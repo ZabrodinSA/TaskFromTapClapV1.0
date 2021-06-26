@@ -174,7 +174,7 @@
       "array": [
         71.571,
         36.862,
-        517.01716605931,
+        526.5434455009387,
         0,
         0,
         0,
@@ -978,7 +978,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "becc4KE71tAyJ6bYxrk7M9y",
+    "_componentId": "17d7d7jyGVJqr6CkugVlH8J",
     "handler": "StartOver",
     "customEventData": ""
   },
@@ -1364,7 +1364,7 @@
       "__id__": 7
     },
     "component": "",
-    "_componentId": "becc4KE71tAyJ6bYxrk7M9y",
+    "_componentId": "17d7d7jyGVJqr6CkugVlH8J",
     "handler": "NewSize",
     "customEventData": ""
   },

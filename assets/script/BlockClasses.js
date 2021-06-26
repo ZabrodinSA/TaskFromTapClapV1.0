@@ -3,20 +3,27 @@ class Block {
         this.selected = false
         this.column = column
         this.line = line
-        // this.blockRight = blockRight
     }
 
     Click (game, callbacks) {
+        this.ExecuteCallbacks (game, callbacks)
+        let numberOfDestroyedBlocks = 0
+        var blocksForDeletion = []
+
+        game.field.ExecuteForAllBlocks ((blocks, column, line) => {
+            if (blocks[column][line].selected) {
+                blocksForDeletion.push(blocks[column][line])
+                numberOfDestroyedBlocks ++
+            }
+        })        
+        this.DestroyedBlocks(game, blocksForDeletion)
+        game.field.CreatingMissingBlocks()    
         return numberOfDestroyedBlocks
     }
 
-    SelectTheBlock () {
-        this.selected = true        
-    }
+    SelectTheBlock () {this.selected = true}
 
-    DoNotSelectABlock () {
-        this.selected = false
-    }
+    DoNotSelectABlock () {this.selected = false}
 
     DestroyedBlocks (game, blocksForDeletion = []) {
         for (var i = blocksForDeletion.length - 1; i >= 0; i--) {
@@ -37,28 +44,17 @@ class ColorBlock extends Block {
 
     constructor (column, line) {
         super (column, line)
-        if (column == 0 )
-        {this.name = 'blue'}//ColorBlock.colors[cc.math.randomRangeInt(0, ColorBlock.colors.length)]
-        else {this.name = 'red'}
+        // if (column == 0 )
+        this.name = ColorBlock.colors[cc.math.randomRangeInt(0, ColorBlock.colors.length)]
+        // else {this.name = 'red'}
     }
 
     Click (game, callbacks) {
-        cc.log('click for color')
-        this.ExecuteCallbacks (game, callbacks)
-        let numberOfDestroyedBlocks = 0
-        let blocksForDeletion = []
+  
         if (game.field.allocatedBlockCounter >= game.K) {
-            game.field.FunctionForAllBlocks ((blocks, column, line) => {
-                if (blocks[column][line].selected) {
-                    blocksForDeletion.push(blocks[column][line])
-                    numberOfDestroyedBlocks ++
-                }
-            })
-            this.DestroyedBlocks(game, blocksForDeletion)
-            
-            game.field.CreatingMissingBlocks()
+            return super.Click(game, callbacks)
         }
-        return numberOfDestroyedBlocks
+        
     }
 }
 
@@ -69,26 +65,16 @@ class SuperBlock extends Block {
     }
 
     static SuperBlockCallBack (game, column, line) {
-        cc.log(`Super block call back `)
-
         game.field.blocks[column][line] = new SuperBlock (column, line)
     }
 
-    Click (game, callbacks) {
-        cc.log('click for super')
-
-        this.ExecuteCallbacks (callbacks)
-        let numberOfDestroyedBlocks = 0
-        let blocksForDeletion = []
-
-        game.field.FunctionForAllBlocks ((blocks, column, line) => {
-            // if (blocks[column][line].selected) {
-            //     blocksForDeletion.push(blocks[column][line])
-            // }
+    SelectTheBlock (field) {
+        super()
+        field.ExecuteForAllBlocks ((blocks, column, line) => {
+            if (this.column == column) {
+                blocks[column][line].SelectTheBlock(field) 
+            }
         })
-        this.DestroyedBlocks(blocksForDeletion)
-        game.field.CreatingMissingBlocks()    
-        return numberOfDestroyedBlocks
     }
 }
 

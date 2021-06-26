@@ -63,13 +63,11 @@ cc.Class({
 
     SetWidth () {
         this.width = this.SetSize(this.widthNode.getComponent(cc.EditBox).string, this._maxWidth, this._minWidth)
-        Global.width = this.width//
         this.widthNode.getComponent(cc.EditBox).string = this.width
     },
 
     SetHeight () {
         this.height = this.SetSize(this.heightNode.getComponent(cc.EditBox).string, this._maxHeight, this._minHeight)
-        Global.height = this.height//
         this.heightNode.getComponent(cc.EditBox).string = this.height
     },
 
@@ -79,8 +77,7 @@ cc.Class({
         } else if (this.height == undefined) {
             this.messageNode.getComponent(cc.Label).string = 'Введите высоту поля'
         } else {
-            game = new Game(this.width, this.height)
-            // cc.log(game)
+            game = new Game(this.width, this.height)        
             cc.director.loadScene('Game')
         }
     },

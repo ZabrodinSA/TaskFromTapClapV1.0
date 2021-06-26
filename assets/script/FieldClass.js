@@ -6,7 +6,6 @@ export class Field {
         this._minColumns = 1
         this._numberOfColumns = numberOfColumns
         this._numberOfLines = numberOfLines
-        this.blocks = [[]]
         this.blocks = new Array (numberOfColumns)
         for (let i = 0; i < numberOfColumns; i++) {
             this.blocks[i] = new Array (0)
@@ -29,9 +28,12 @@ export class Field {
         }
 
     CreatingMissingBlocks () {
-        this.FunctionForAllBlocks ((blocks, column, line) => {
+        this.ExecuteForAllBlocks ((blocks, column, line) => {
             if (blocks[column][line] == undefined) {
                 blocks[column].push(new BlockClasses.ColorBlock (column, line))
+            } else {
+                blocks[column][line].column = column
+                blocks[column][line].line = line
             }
         } )
     } 
@@ -39,7 +41,7 @@ export class Field {
     SelectTheBlock (column, line) {
         if (!this.blocks[column][line].selected) {
             this.allocatedBlockCounter++
-            this.blocks[column][line].SelectTheBlock ()
+            this.blocks[column][line].SelectTheBlock (this)
             if (column + 1 < this.numberOfColumns) {
                 this.SelectAdjacentBlock(this.blocks[column][line], this.blocks[column + 1][line])
             }
@@ -63,12 +65,12 @@ export class Field {
 
     DoNotSelectAllBlocks () {
         this.allocatedBlockCounter = 0
-        this.FunctionForAllBlocks((blocks, column, line) => {
+        this.ExecuteForAllBlocks((blocks, column, line) => {
             blocks[column][line].DoNotSelectABlock()
         })
     } 
     
-    FunctionForAllBlocks (callBack) {
+    ExecuteForAllBlocks (callBack) {
         for (var i = 0; i < this.numberOfColumns; i++) {
             for (var j = 0; j < this.numberOfLines; j++) {
                 callBack(this.blocks, i, j)
